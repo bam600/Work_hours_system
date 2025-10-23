@@ -1,0 +1,135 @@
+/* 出品作成画面 */
+
+/* コンテンツを中央揃えにする */
+.centered {
+    display: flex;
+    flex-direction: column;
+    /* 縦並び */
+    justify-content: center;
+    /* 垂直方向の中央揃え */
+    align-items: center;
+    /* 水平方向の中央揃え */
+    min-height: 100vh;
+    /* 画面の高さに合わせる */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* レイアウト形成 */
+h1.category-title {
+    font-size: 70px;
+    text-align: center;
+    color:#000;
+    font-weight: bold;
+    margin-top: 200px;
+    margin-bottom: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+h2.category-title {
+    display: inline-block;
+    /* ← 幅を文字に合わせる */
+    font-size: 50px;
+    width: 80%;
+    font-weight: bold;
+    color: #5f5f5f;
+    padding-bottom: 4px;
+    margin-bottom: 24px;
+    margin-right: 550px;
+    font-family: 'Inter', sans-serif;
+    border-bottom: 2px solid #5f5f5f;
+    /* ← 文字幅にぴったりの下線 */
+}
+
+h3.category-title {
+    font-size: 40px;
+    color: #000;
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    margin-right: 300px;
+}
+
+h4.category-title {
+    font-size: 30px;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    margin-right: 600px;
+}
+
+
+/* 商品カテゴリー専用 */
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.category-buttons input[type="checkbox"] {
+    display: none;
+}
+.category-button {
+    display: inline-flex;   /* ← 内容に応じてサイズが変わる */
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px; /* ← 横幅に余裕を持たせる */
+    border-radius: 20px;
+    border: 2px solid red;
+    background-color: #fff;
+    color: red;
+    font-size: 18px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;    /* ← 改行を防ぐ */
+    min-width: 100px;   /* ← 最小サイズを保証（任意） */
+}
+/* 選択されたときのスタイル */
+.category-buttons input[type="checkbox"]:checked+.category-button {
+    background-color: #FF5555;
+    color: white;
+    border-color: #FF5555;
+}
+
+/* カテゴリーの並びをレイアウト */
+.product-grid {
+    /* 画像を表示を折り返す設定 */
+    display: grid;
+    /* グリッドに並べる為のレイアウト指定 */
+    grid-template-columns: repeat(5, 1fr);
+    /* 4列で均等に並べる*/
+    gap: 30px;
+    /* 画像動詞の間隔をあける*/
+    padding: 20px;
+}
+
+/* セレクトボックス */
+.form-select{
+    width: 800px;
+    height:50px;
+    color: #000;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    margin-left: 300px;
+}
+.form-select option {
+    background-color: #aaa;
+    color: white;
+}
+
+
+/* 商品説明 */
+.description-box {
+    width: 100%;    /* ← 横幅いっぱいに広げる */
+    max-width: 800px;   /* ← 最大幅を制限（任意） */
+    height: 200px;  /* ← 高さを指定して大きくする */
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    resize: vertical;   /* ← ユーザーが高さを調整可能にする */
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+    margin-left: 300px;
+}

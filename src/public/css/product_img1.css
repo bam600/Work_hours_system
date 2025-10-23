@@ -1,0 +1,124 @@
+.item_img { /* 商品画像のスタイル*/
+    width: 300px;   /* 幅を固定：画像の横幅を300pxに統一 */
+    height: 300px;  /* 高さを固定：縦幅も300pxに統一 */
+    object-fit: cover;  /* 枠に合わせてトリミング：枠に収める */
+    border-radius: 2px; /* 角丸：画像の角を少しだけ丸くする */
+    display: block; /* ブロック要素化：余計な隙間を防ぎ、marginが効くよう */
+    margin: 0 auto 50px;    /* 上0px、左右autoで中央寄せ、下10pxの余白 */
+}
+
+.product-grid { /* 画像を表示を折り返す設定 */
+    display: grid; /* グリッドに並べる為のレイアウト指定 */
+    grid-template-columns: repeat(4, 1fr); /* 4列で均等に並べる*/
+    gap: 5px; /* 画像動詞の間隔をあける*/
+    padding: 10px;
+}
+
+button.header_logout { /* ヘッダーのボタン用 */
+    all: unset; /* すべてのブラウザデフォルトスタイルを解除 */
+    color:#ffffff; /* リンク色 */
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: none;
+    border: none;
+    padding: 0px 20px 30px 0px;
+    border-radius: 4px;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: flex-start; /* 左寄せ */
+    gap: 50px;
+    padding-left: 20px; /* 左側に余白を追加（任意） */
+    width: 100%; /* 親要素が画面幅に広がるように */
+    box-sizing: border-box;  /* paddingを含めて幅を計算 */
+    margin-top:200px;
+    margin-bottom: 100px;
+    border-bottom: 2px solid #5f5f5f;
+
+}
+
+.normal-button{
+    all: unset; /* すべてのブラウザデフォルトスタイルを解除 */ 
+    color: #5f5f5f; /* リンク色 */
+    cursor: pointer;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: none;
+    border: none;
+    padding: 0px 20px 30px 0px;
+    border-radius: 4px;
+}
+
+.active-button {
+    all: unset; /* すべてのブラウザデフォルトスタイルを解除 */
+    color: red; /* リンク色 */
+    cursor: pointer;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: none;
+    border: none;
+    padding: 0px 20px 30px 0px;
+    border-radius: 4px;
+}
+/* レスポンシブ対応 */
+@media screen and (min-width: 1500px) {
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .item_img {
+        width: 300px;
+        height: 300px;
+    }
+    .tab-buttons {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    /* profileボタン */
+    .profile_link{
+        color: red;
+        display: inline-block;
+        padding: center;
+        border-radius: 30px;
+        width:200px;
+        margin-bottom: 60px;
+        border: 1px solid red;  /* 太さ・線種・色 */
+    }
+    /* profileボタンテキスト設定 */
+    .profile_text{
+        font-size: 18px;
+        color: red;
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    /* 購入済みラベル */
+    .sold-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* 半透明黒 */
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+    }
+}
+

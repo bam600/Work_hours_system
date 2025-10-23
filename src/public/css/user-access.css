@@ -1,0 +1,117 @@
+/**会員登録・ログイン・個人情報登録画面専用**/
+
+/* PC画面（1400px以上）に対応 */
+@media screen and (min-width: 1400px) {
+    .container {
+        max-width: 1280px;
+        /* 画面幅より少し狭くして中央寄せ */
+        margin: 0 auto;
+        padding: 32px;
+    }
+    .form-wrapper {
+        display: flex;
+        gap: 48px;
+    }
+    .form-section {
+        flex: 1;
+    }
+    .sidebar {
+        width: 300px;
+    }
+}
+
+
+
+/* テーブルの設定 */
+table {
+    /* 左右のマージを自動に設定 */
+    margin-left: auto; 
+    margin-right: auto;
+    margin-top: 100px;
+    width: 100%;
+    /* 親要素いっぱいに広げる */
+    max-width: 1400px;
+    /* 最大幅を制限（任意） */
+    height: auto;
+    /* 高さは内容に応じて自動調整 */
+    font-size: 24px;
+    /* 文字サイズを大きくして視認性アップ */
+}
+.table-wrapper {
+    max-height: 1300px;
+    overflow-y: scroll;
+    display: block;
+    padding: 16px;
+}
+
+/* 見出し２（会員登録) */
+h2{
+    font-family: 'Inter', sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 入力項目 */
+.td label {
+    display: block;
+    padding-left: 300px;
+    /* ← marginではなくpaddingを使う */
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+}
+
+/* 入力画面 */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    min-width: 800px;   /* 横幅を指定 */
+    max-width: 1400px;/* 横幅を指定 */
+    height: 70px;   /* 高さを指定 */
+    font-size: 24px;    /* 文字サイズを大きく */
+    padding: 8px 12px;  /* 内側の余白で見た目を調整 */
+    box-sizing: border-box; /* padding込みでサイズ調整しやすく */
+    border: 1px solid #5F5F5F;
+    border-radius: 3px;
+    margin-left: 300px;
+    margin-bottom: 40px;
+}
+
+/* button専用 */
+button {
+    min-width: 800px;/* 横幅を指定 */
+    max-width: 1400px;/* 横幅を指定 */
+    height: 70px;/* 高さを指定 */
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    color: #5F5F5F;
+    background-color: #FF5555;  /* 背景色 */
+    border: none;   /* 枠線なし */
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;  /* 上下20px、左右自動で中央配置 */
+    
+}
+
+/* リンクボタン専用 */
+.center-link {
+    text-align: center;
+    text-decoration: none;
+}
+.center-link a {
+    text-decoration: none;
+    color:#0073CC;
+    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* エラーメッセージ */
+.error{
+    font-size: 20px;
+    font-family: 'Inter', sans-serif;
+    color: red;
+    padding: center;
+    white-space: nowrap;
+    /* 折り返さず1行で表示 */
+}
