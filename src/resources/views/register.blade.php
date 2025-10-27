@@ -1,4 +1,4 @@
-{{-- PG03 会員登録登録画面 --}}
+{{-- PG01 会員登録登録画面 --}}
 
 {{--共通レイアウトの継承--}}
 @extends('layouts.app')  
@@ -14,107 +14,78 @@
 {{--以下会員登録フォーム--}}
 @section('content')  
 
-{{--登録を行うPOSTの送信先に、名前付きルート register.create を使用。--}}
-<form action="{{ route('register.store') }}" method="post">    
+{{--登録を行うPOSTの送信先に、RegisterControllerのstoreメソッド(register.store)を使用。--}}
+<form action="{{ route('register.store') }}" method="POST">
+    {{--@csrf はLaravelのセキュリティ機能（CSRF対策--}}
     @csrf
 
-    <div class="table-wrapper">
-        <table>
-            
-            <caption class="h2">会員登録</caption>
+<div class="register-wrapper">
+    <h2 class="form-title">会員登録</h2>
 
-            <tr>
-                <td class="td">
-                    <label>ユーザー名</label>
-                </td>
-                    
-                <td>
-                    {{--エラーメッセージ--}}
-                    <span class="error">
-                        @error('user_name') 
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </td>
-            </tr>
-                
-            <tr>
-                <td colspan =2>
-                    {{--old('user_name') で直前入力を保持。--}}
-                    <input type ="text" name="user_name" placeholder="{{ old('email') }}"  value="{{ old('user_name') }}"/>
-                </td>
-            </tr>
+<div class="form-group">
+    <label for="user_name">名前</label>
 
-            <tr>
-                <td class="td">
-                    <label>メールアドレス</label>
-                </td>
+    {{--type="text" → テキストを入力できるボックスを作る--}}
+    {{--id="user_name" → ページ内で一意の名前。CSSやJavaScriptで使う。--}}
+    {{--name="user_name" → フォームを送信するときに、サーバーへ送るデータのキー（Laravelでは、コントローラ側で $request->user_name で受け取れる）--}}
+    {{--{{ old('user_name') }}が表示されるoldは直前の入力内容を一時的に記憶--}}
+    <input 
+        type="text" 
+        id="user_name" 
+        name="user_name" 
+        value="{{ old('user_name') }}">
+    {{--@error('user_name')はバリデーションエラー時にエラーメッセージを表示(user_nameはname属性を指す--}}
+    @error('user_name') 
+        <span class="error">
+            {{ $message }}
+        </span>
+    @enderror
+</div>
 
-                <td>
-                    <span class="error">
-                        @error('email')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </td>
-            </tr>
+<div class="form-group">
+    <label for="email">メールアドレス</label>
+        <input type="text"
+                id="email"
+                name="email"
+                value="{{ old('email') }}">
+    @error('email')
+        <span class="error">
+            {{ $message }}
+        </span>
+    @enderror
+</div>
 
-            <tr>
-                <td colspan =2><input type ="email" name="email" placeholder="{{ old('email') }}" value="{{ old('email') }}" />
-                </td>
-            </tr>
+<div class="form-group">
+    <label for="password">パスワード</label>
+    <input type="password"
+            id="password" 
+            name="password">
+    @error('password')
+        <span class="error">
+            {{ $message }}
+        </span>
+    @enderror
+</div>
 
-            <tr>
-                <td class="td">
-                    <label>パスワード</label>
-                </td>
+<div class="form-group">
+    <label for="password_confirmation">確認用パスワード</label>
+        <input type="password" 
+                id="password_confirmation" 
+                name="password_confirmation">
+    @error('password_confirmation') 
+        <span class="error">
+            {{ $message }}
+        </span>
+    @enderror
+</div>
 
-                <td>
-                    <span class="error">
-                        @error('password')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </td>
-            </tr>
+    {{-- button は、ボタンを作るHTMLタグ type="submit" は「フォームを送信するボタン ボタンを押すと、name="" 属性で指定されたデータがサーバー（Laravelコントローラ）に送信 --}}
+    <button type="submit" class="btn btn--primary">登録する</button>
+        <div class="center-link">
 
-            <tr>
-                <td colspan =2><input type="password" name="password" />
-                </td>
-            </tr>
-
-            <tr>
-                <td class="td">
-                    <label>確認用パスワード</label>
-                </td>
-
-                <td>
-                    <span class="error">
-                        @error('password_confirmation')
-                            {{ $message }}
-                        @enderror
-                    </span> 
-                </td>   
-            </tr>
-            
-            <tr>
-                <td>
-                    <input type ="password" name="password_confirmation" value="{{ old('password_confirmation') }}" />
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2">
-                    <button type="submit">登録する</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan=2 class="center-link" >
-                    <a href="{{ route('login') }}">ログインはこちら</a>
-                </td>
-            </tr>
-        </table>
-    </div>
+            {{--ルートヘルパー関数で /loginのURLを作成しクリックすると遷移-}}
+            <a href="{{ route('login') }}">ログインはこちら</a>
+        </div>
+</div>
 </form>
 @endsection

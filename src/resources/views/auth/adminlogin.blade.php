@@ -17,32 +17,26 @@
 <div class="register-wrapper">
     <h2 class="form-title">ログイン</h2>
 
-    {{-- 認証エラー --}}
-    @if ($errors->has('auth'))
-        <div class="alert error">
-            {{ $errors->first('auth') }}
-        </div>
-    @endif
-
-    {{-- セッションメッセージ（例：ログアウト後の通知など） --}}
+{{-- 成功/情報メッセージ（パスワードリセット送信後など） --}}
     @if (session('status'))
         <div class="alert info">{{ session('status') }}</div>
     @endif
 
-    <form method="POST" action="{{ route('login') }}">
+<form method="POST" action="{{ route('login') }}">
     @csrf
-<div class="form-group">
-    <label for="email">メールアドレス</label>
-    <input type="text" id="email" name="email" value="{{ old('email') }}"/>
-    @error('email') <span class="error">{{ $message }}</span> @enderror
-</div>
 
-<div class="form-group">
-    <label for="password">パスワード</label>
-    <input type="password" id="password" name="password"/>
+    <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input type="text" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email"/>
+    @error('email') <span class="error">{{ $message }}</span> @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password"         required autocomplete="current-password" />
     @error('password') <span class="error">{{ $message }}</span> @enderror
 </div>
-
+    
     <button type="submit" class="btn btn--primary">ログインする</button>
 </form>
 

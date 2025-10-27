@@ -1,19 +1,13 @@
 <?php
-/**
- * ログイン・ログアウト認証-----------------------------------
- * このコントローラは App\Http\Controllers\Auth 名前空間に属する
- * Laravel Fortify の認証関連コントローラーと同じ構造にすることで
- * Fortifyのルート定義と自然に連携できる
-*/
+
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;             //Request：HTTPリクエストを受け取るため。
 use Illuminate\Support\Facades\Auth;    //Auth：Laravelの認証ファサード。ログイン・ログアウト処理に使用
 use App\Http\Controllers\Controller;   //Laravelの基本コントローラークラス。これを継承して機能を拡張
 
-
-class AuthenticatedSessionController extends Controller
-{   
+class AdminSessionController extends Controller
+{
     /**
      * ユーザがログアウト処理を
      * 行ったときに呼ばれるメソッド
@@ -29,13 +23,10 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();  //セッション無効化　現在のセッション破棄
         $request->session()->regenerateToken(); // CSRFトークン再生成
 
-        return redirect('/login'); // ← ログアウト後にログイン画面へ
+        return redirect('admin/login'); // ← ログアウト後にログイン画面へ
     }
-
-    
 public function store(Request $request)
 {
-    // バリデーション（入力チェック）
     $request->validate([
         'email' => ['required', 'email'],
         'password' => ['required'],
@@ -45,16 +36,16 @@ public function store(Request $request)
         'password.required' => 'パスワードを入力してください',
     ]);
 
-    // 認証チェック（ログイン試行）
-    if (!Auth::attempt($request->only('email', 'password'))) {
+    // 管理者用ガードで認証
+    if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
         return back()->withErrors([
             'auth' => 'ログイン情報が登録されていません',
         ])->withInput();
     }
 
-    // ログイン成功時の処理
     $request->session()->regenerate();
-    return redirect()->intended('/attendance');
+
+    return redirect()->intended('/admin/dashboard');
 }
 
 }

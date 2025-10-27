@@ -97,10 +97,6 @@
     transition: background 0.2s ease;
 }
 
-.btn--primary:hover {
-    background: #ff3232;
-}
-
 /* ログインリンク */
 .center-link {
     text-align: center;

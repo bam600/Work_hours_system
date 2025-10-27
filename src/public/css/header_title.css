@@ -1,168 +1,137 @@
-/* header専用CSS */
+/* ===============================
+    Header 全修正版（ロゴ左寄せ）
+   =============================== */
 
-
-body {
-    /*固定ヘッダーの高さ分だけ、本文を下にずらすための余白。*/
-    padding-top: 100px; 
-    /*ブラウザのデフォルト余白をリセット。*/
-    margin: 0;
-    /*padding や border を含めて幅・高さを計算。レイアウト崩れを防ぐ。*/
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+/* 基本設定 */
+:root {
+    --header-h: 100px;
+    --bg: #000;
+    --fg: #fff;
 }
 
-/* ヘッダー内*/
+/* 全体のリセットと余白調整 */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    padding-top: var(--header-h);
+    /* 固定ヘッダーと重ならないように */
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    color: #111;
+    background: #fff;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+/* ヘッダー本体 */
 .header {
-    /*ヘッダーの背景色を黒に設定。*/
-    background-color: #000;
-    /*横幅を画面いっぱい*/
-    width: 100%;
-    /*ヘッダーの高さを固定。*/
-    height: 100px;
-    /*画面の最上部に固定表示。*/
     position: fixed;
     top: 0;
     left: 0;
-    /*他の要素より前面に表示。*/
+    width: 100%;
+    height: var(--header-h);
+    background: var(--bg);
+    color: var(--fg);
     z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* ヘッダー内レイアウト */
+/* 中身のレイアウト */
 .header__inner {
-    max-width: 1400px;
+    width: 100%;
+    height: var(--header-h);
     margin: 0 auto;
+    padding: 0 20px;
+    /* 左右の余白を調整 */
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    padding: 0 20px;
+    justify-content: flex-start;
+    /* ★ ロゴを左寄せ */
 }
 
 /* ロゴ */
 .header__logo {
     display: flex;
     align-items: center;
-    padding: 10px;
+    justify-content: flex-start;
+    text-decoration: none;
 }
 
 .logo-image {
-    width: 250px;
+    width: clamp(160px, 20vw, 240px);
     height: auto;
     display: block;
 }
 
-/* 検索フォームとアクションボタンのラッパー */
-.flex {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-grow: 1;
+/* メイン領域（本文） */
+.main {
+    width: min(1000px, 100% - 40px);
+    margin: 24px auto;
 }
 
-/* 検索ボックス */
-.flex input[type="text"] {
-    height: 40px;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 600px;
-    border-radius: 10px;
-    padding: 0 10px;
-    border: none;
+/* =========================
+PC対応（1400〜1540px）
+========================= */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .register-wrapper {
+        width: 50%;
+        padding: 50px;
+    }
+
+    .form-title {
+        font-size: 2.2rem;
+    }
+
+    .form-group label {
+        font-size: 1.2rem;
+    }
+
+    .form-group input {
+        padding: 12px 14px;
+        font-size: 1.1rem;
+    }
+
+    .btn--primary {
+        font-size: 1.2rem;
+        padding: 14px 0;
+    }
 }
 
-/* アクションボタン群 */
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: nowrap;
-}
-
-/* リンクとボタン共通 */
-.header-actions a,
-.header-actions button {
-    white-space: nowrap;
-    padding: 10px 16px;
-    font-size: 18px;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    border-radius: 6px;
-    transition: background-color 0.2s ease;
-}
-
-/* リンクスタイル */
-.header-link {
-    color: #fff;
-    background-color: transparent;
-    text-decoration: none;
-}
-
-button.header_logout {
-    /* ヘッダーのボタン用 */
-    all: unset;
-    /* すべてのブラウザデフォルトスタイルを解除 */
-    color: #ffffff;
-    /* リンク色 */
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 24px;
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    background: none;
-    border: none;
-    padding: 0px 20px 30px 0px;
-    border-radius: 4px;
-}
-
-/* 出品ボタンスタイル */
-.header-button {
-    background-color: #fff;
-    color: #333;
-}
-
-/* レスポンシブ対応 */
-@media screen and (max-width: 768px) {
-    .header {
-        height: auto;
-        position: static;
+/* =========================
+タブレット対応（768〜850px）
+========================= */
+@media (min-width: 768px) and (max-width: 850px) {
+    :root {
+        --header-h: 90px;
     }
 
-    body {
-        padding-top: 0;
+    .register-wrapper {
+        width: 80%;
+        padding: 30px;
     }
 
-    .header__inner {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px;
+    .form-title {
+        font-size: 1.8rem;
     }
 
-    .flex {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
+    .form-group label {
+        font-size: 1rem;
     }
 
-    .flex input[type="text"] {
-        width: 100%;
-        margin-top: 10px;
+    .form-group input {
+        font-size: 1rem;
     }
 
-    .header-actions {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-    }
-
-    .header-actions a,
-    .header-actions button {
-        width: 100%;
-        font-size: 16px;
-        padding: 10px;
-    }
-
-    .logo-image {
-        width: 180px;
+    .btn--primary {
+        font-size: 1.05rem;
     }
 }

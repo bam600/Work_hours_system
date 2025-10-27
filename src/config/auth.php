@@ -42,6 +42,11 @@ return [
         ],
     ],
 
+        'admin' => [ // ← 追加！
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -62,8 +67,13 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Staff::class,
         ],
+
+            'admins' => [ // ← 追加！
+        'driver' => 'eloquent',
+        'model' => App\Models\IsAdminUser::class,
+    ],
 
         // 'users' => [
         //     'driver' => 'database',

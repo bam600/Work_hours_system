@@ -41,12 +41,12 @@ class LoginRequest extends FormRequest
 
     // バリデーションエラーメッセージの設定
     public function messages()
-     {
+{
         return [
             'email.required' => 'メールアドレスを入力してください',
             'email.email' => '正しいメールアドレス形式で入力してください',
             'password.required' => 'パスワードを入力してください',
             'password.min' => 'パスワードは8文字以上で入力してください',
         ];
-     }
+    }
 }

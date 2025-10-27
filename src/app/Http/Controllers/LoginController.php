@@ -13,28 +13,15 @@ class LoginController extends Controller
 {   
     //GET /login にアクセスされたときに呼び出されるメソッド。
     // resources/views/auth/login.blade.php を表示します。
-    public function loginshow()
+    public function Loginshow()
     {
         return view('auth.login');
     }
-
-    // POST /login に送信されたフォームデータを受け取るメソッド。
-    //LoginRequest によって、バリデーションは事前に済んだ状態で呼び出されます。
-    public function store(LoginRequest $request)
+    
+    public function Loginstore()
     {
-        //フォームから送られた email と password を抽出
-        // only() は指定したキーだけを取り出す Laravel の便利メソッド
-        // $credentialsに入力フォームで入力されたメールとパスワードが代入される
-        $credentials = $request->only('email', 'password');
-
-        // Auth::attempt() により、認証を試みます。
-        // 成功すれば / にリダイレクト。
-        if (Auth::attempt($credentials)) {
-            return redirect('/');
-        }
-        // 認証失敗時の処理(登録情報と異なる)
-        return back()->withErrors([
-            'auth' => 'ログイン情報が登録されていません',
-        ])->withInput();
+        
+        return view('auth.login');
     }
+
 }

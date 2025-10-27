@@ -1,5 +1,5 @@
 <?php
-
+// 社員管理テーブル
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,24 +12,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('staff', function (Blueprint $table) {
             // ID
             $table->id();
-            // ユーザー名
+            // 社員名
+            $table->string('employee_number')->unique();
+            // 社員番号
             $table->string('user_name', 255);
             // メールアドレス
             $table->string('email', 255)->unique();
             // パスワード
-            $table->string('password', 255);
-
+            $table->string('password', 255)->unique();;
             // Fortify 2要素認証カラム
             $table->text('two_factor_secret')->nullable();
             $table->text('two_factor_recovery_codes')->nullable();
-
             if (Fortify::confirmsTwoFactorAuthentication()) {
                 $table->timestamp('two_factor_confirmed_at')->nullable();
             }
-
             // タイムスタンプ
             $table->timestamps();
         });
@@ -40,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('staff');
     }
 };
