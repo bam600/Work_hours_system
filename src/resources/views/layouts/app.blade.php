@@ -22,19 +22,7 @@
                 <img class="logo-image" src="{{ asset('images/logo.svg') }}" alt="ロゴ">
             </a>
         </div>
-        @if(Auth::guard('admin')->check())
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">勤怠一覧</a>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">スタッフ一覧</a>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">申請一覧</a>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">ログアウト</a>
-        @else
-            <p>ログイン中です！</p>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">勤怠</a>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">勤怠一覧」</a>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">申請</a>
-            <a href="{{ route('register') }}" style="color: white; background-color: black; padding: 5px;">ログアウト</a>
-        @endif
-
+        @yield('header')
     </header>
 
     <main class="main">

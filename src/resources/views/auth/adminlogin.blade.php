@@ -15,7 +15,7 @@
 @section('content') 
 
 <div class="register-wrapper">
-    <h2 class="form-title">ログイン</h2>
+    <h2 class="form-title">管理者ログイン</h2>
 
 {{-- 成功/情報メッセージ（パスワードリセット送信後など） --}}
     @if (session('status'))
@@ -27,13 +27,13 @@
 
     <div class="form-group">
         <label for="email">メールアドレス</label>
-        <input type="text" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email"/>
+        <input type="text" id="email" name="email" value="{{ old('email') }}"/>
     @error('email') <span class="error">{{ $message }}</span> @enderror
     </div>
 
     <div class="form-group">
         <label for="password">パスワード</label>
-        <input type="password" id="password" name="password"         required autocomplete="current-password" />
+        <input type="password" id="password" name="password"/>
     @error('password') <span class="error">{{ $message }}</span> @enderror
 </div>
     

@@ -1,0 +1,77 @@
+/* ==============================================
+    ログインしたユーザに表示されるheaderボタン用CSS
+   ============================================== */
+
+/* ヘッダー全体の箱 */
+.header {
+    /* 常に画面上部に固定する設定 */
+    position: fixed; 
+    /* 画面の左上（0,0）に配置 */
+    top: 0;
+    left: 0;
+    /* 画面の横幅いっぱいに広げる */
+    width: 100%;
+    /*CSS変数 --header-h に指定された高さを使います。*/
+    height: var(--header-h);
+    /* 背景色もCSS変数 --bg によって設定。テーマカラーを簡単に変えられる工夫*/
+    background: var(--bg);
+    /*他の要素より前面に表示されるようにする*/
+    z-index: 1000;
+}
+
+/* 右上のリンクボタン全体 */
+.header__links {
+    /* .header の中で位置を絶対指定 */
+    position: absolute;
+    /*上から35px下げた位置に配置  */
+    top: 35px;
+    /* 右端から20pxの位置に配置 */
+    right: 20px;
+    /*リンクを横並びに配置 */
+    display: flex;
+    /*各リンクの間に40pxのすき間をあける*/
+    gap: 40px;
+}
+
+/* 1つ1つのボタン */
+.link {
+    /* スタイリッシュな英字フォント「Inter」を使用。なければ標準の sans-serif*/
+    font-family: 'Inter', sans-serif;
+    /* 文字サイズを大きめに*/
+    font-size: 24px;
+    /*文字色を白に*/
+    color:#fff;
+    /* 下線を消します（リンク特有の下線を非表示）*/
+    text-decoration: none;
+}
+
+/* ログアウトボタン */
+.btm{
+    /* スタイリッシュな英字フォント「Inter」を使用。なければ標準の sans-serif*/
+    font-family: 'Inter', sans-serif;
+    /* 文字サイズを大きめに*/
+    font-size: 24px;
+    /*文字色を白に*/
+    color: #fff;
+    background-color:#000;
+    border: none;
+}
+
+/* ==============================================
+    タブレット用（768px～1023px）
+   ============================================== */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .header {
+        height: 70px;
+    }
+
+    .header__links {
+        top: 25px;
+        right: 15px;
+        gap: 25px;
+    }
+
+    .link {
+        font-size: 18px;
+    }
+}

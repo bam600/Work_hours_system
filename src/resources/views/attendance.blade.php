@@ -8,8 +8,25 @@
 
 {{--専用CSSを読み込む---}}
 @section('head')    
-    <link rel="stylesheet" href="{{ asset('attendance.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+    <!-- ログイン認証されたときに表示されるheader用CSS -->
+    <link rel="stylesheet" href="{{ asset('css/login_auth.css') }}">
 @endsection
+
+@section('header')
+    @if (Auth::check())
+        <div class="header__links">
+            <a class="link" href="{{ route('login') }}">勤怠一覧</a>
+            <a class="link" href="{{ route('login') }}">勤怠</a>
+            <a class="link" href="{{ route('login') }}">申請</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btm">ログアウト</button>
+            </form>
+        </div>
+    @endif
+@endsection
+
 
 {{--以下会員登録フォーム--}}
 @section('content')  
@@ -19,15 +36,19 @@
     @csrf
 
 <div class="register-wrapper">
-    <h2 class="form-title">勤怠外</h2>
+    <h2 class="lavel">勤怠外</h2>
 
 
-    <button type="submit" class="btn btn--primary">出勤</button>
+    <button type="submit" class="btn--check">出勤</button>
+
+    <button type="submit" class="btn--check">退勤</button>
+    <button type="submit" class="btn--break">休憩入</button>
+
+    <button type="submit" class="btn--break">休憩戻</button>
+
+    <button type="submit" class="btn--end">お疲れさまでした</button>
+
 </div>
-</form>
 
-            <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit">ログアウト</button>
-            </form>
+
 @endsection

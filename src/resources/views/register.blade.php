@@ -83,7 +83,7 @@
     <button type="submit" class="btn btn--primary">登録する</button>
         <div class="center-link">
 
-            {{--ルートヘルパー関数で /loginのURLを作成しクリックすると遷移-}}
+            {{--ルートヘルパー関数で /loginのURLを作成しクリックすると遷移--}}
             <a href="{{ route('login') }}">ログインはこちら</a>
         </div>
 </div>

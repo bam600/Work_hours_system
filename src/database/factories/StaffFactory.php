@@ -15,7 +15,7 @@ class StaffFactory extends Factory
         return [
             'user_name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'employee_number' => $this->faker->unique()->bothify('??#####??'),
+            'is_admin' => $this->faker->boolean(),
             'password' => bcrypt('00000000'),
         ];
     }

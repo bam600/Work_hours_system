@@ -15,6 +15,6 @@ class Staff extends Authenticatable
     use Notifiable;
     use HasFactory;
     // $fillableで安全に代入可能なカラムを明示。無い場合create()は使えない
-    protected $fillable = ['user_name','employee_number', 'email', 'password'];
+    protected $fillable = ['user_name','email','password','is_admin'];
 
 }

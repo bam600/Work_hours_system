@@ -36,15 +36,14 @@ return [
     */
 
     'guards' => [
+        // 通常ユーザー用のログインID
         'web' => [
+            // ログイン状態をセッションで保持
             'driver' => 'session',
-            'provider' => 'users',
+            // Staff(モデル)プロバイダー
+            'provider' => 'staff',
         ],
-    ],
 
-        'admin' => [ // ← 追加！
-        'driver' => 'session',
-        'provider' => 'admins',
     ],
 
     /*
@@ -64,21 +63,14 @@ return [
     |
     */
 
+
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Staff::class,
+        'staff' => [
+            'driver' => 'eloquent', //eloquentモデルからとる
+            //Staffモデルがログインユーザーの情報源
+            'model' => App\Models\Staff::class, 
         ],
 
-            'admins' => [ // ← 追加！
-        'driver' => 'eloquent',
-        'model' => App\Models\IsAdminUser::class,
-    ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

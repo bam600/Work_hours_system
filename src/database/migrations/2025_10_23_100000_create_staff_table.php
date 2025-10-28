@@ -16,19 +16,17 @@ return new class extends Migration
             // ID
             $table->id();
             // 社員名
-            $table->string('employee_number')->unique();
-            // 社員番号
             $table->string('user_name', 255);
             // メールアドレス
             $table->string('email', 255)->unique();
             // パスワード
             $table->string('password', 255)->unique();;
+            // 管理者権限判断　false:社員　true:管理者
+            $table->boolean('is_admin')->default(false);
             // Fortify 2要素認証カラム
             $table->text('two_factor_secret')->nullable();
             $table->text('two_factor_recovery_codes')->nullable();
-            if (Fortify::confirmsTwoFactorAuthentication()) {
-                $table->timestamp('two_factor_confirmed_at')->nullable();
-            }
+            $table->timestamp('two_factor_confirmed_at')->nullable();
             // タイムスタンプ
             $table->timestamps();
         });

@@ -2,11 +2,12 @@
 
 namespace App\Actions\Fortify;
 
-use App\Models\User;
+use App\Models\Staff;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 
+// 「ログイン中のユーザーが、パスワードを変更するとき」 に使われる処理クラス
 class UpdateUserPassword implements UpdatesUserPasswords
 {
     use PasswordValidationRules;
@@ -16,16 +17,18 @@ class UpdateUserPassword implements UpdatesUserPasswords
      *
      * @param  array<string, string>  $input
      */
-    public function update(User $user, array $input): void
+    public function update(Staff $staff, array $input): void
     {
+        // 入力内容のチェック(バリデーション)
         Validator::make($input, [
             'current_password' => ['required', 'string', 'current_password:web'],
             'password' => $this->passwordRules(),
         ], [
             'current_password.current_password' => __('The provided password does not match your current password.'),
         ])->validateWithBag('updatePassword');
-
-        $user->forceFill([
+        
+        // パスワードを更新して保存
+        $staff->forceFill([
             'password' => Hash::make($input['password']),
         ])->save();
     }
