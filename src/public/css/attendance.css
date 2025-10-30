@@ -8,6 +8,7 @@ body {
 }
 /* 全体のラッパー（中央寄せ） */
 .register-wrapper {
+    font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,24 +18,52 @@ body {
     /* ← 400px × 1.5 */
     width: 100%;
     padding: 36px;
+    
     /* ← 24px × 1.5 */
 }
 
-
+/*勤怠のステータスラベル*/
 .label {
-    font-size: 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
     /* ← 22px × 1.5 */
     font-weight: 700;
     margin-bottom: 42px;
     /* ← 28px × 1.5 */
-    text-align: center;
-    background-color: #fff;
-    color:#000;
+    color:#696969;
     border-radius: 15px;
 }
 
+/*勤怠のステータスラベルの背景色*/
+.textback{
+        background-color:#C8C8C8;
+        width: 20%;
+        height: 20%;
+        text-align: center;
+        border-radius: 50px;
+        
+}
+
+/*日付*/
+.today{
+    font-family: 'Inter', sans-serif;
+    color: #000;
+    font-size: 40px;
+}
+
+/*時間*/
+.time{
+    font-family: 'Inter', sans-serif;
+    color: #000;
+    font-size: 80px;
+
+}
+
+
+
 /* 勤怠確認ボタン */
 .btn--check {
+    font-family: 'Inter', sans-serif;
     width: 40%;
     background: #000;
     color: #fff;
@@ -53,6 +82,7 @@ body {
 
 /* 休憩ボタン */
 .btn--break {
+    font-family: 'Inter', sans-serif;
     width: 40%;
     background: #fff;
     color: #000;
@@ -72,6 +102,7 @@ body {
 
 /* 休憩ボタン */
 .btn--end {
+    font-family: 'Inter', sans-serif;
     width: 40%;
     background: #fff;
     color: #000;

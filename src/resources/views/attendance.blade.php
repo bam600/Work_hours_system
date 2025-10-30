@@ -36,8 +36,17 @@
     @csrf
 
 <div class="register-wrapper">
-    <h2 class="lavel">勤怠外</h2>
+    <div class="textback">
+        <h2 class="lavel">勤怠外</h2>
+    </div>
 
+@php
+    use Carbon\Carbon;
+    $today = Carbon::now();
+@endphp
+
+<P class="today">{{ \Carbon\Carbon::now()->isoFormat('YYYY年M月D日(ddd)') }}</P>
+<p class="time">{{ \Carbon\Carbon::now()->setTimezone('Asia/Tokyo')->format('H:i') }}</p>
 
     <button type="submit" class="btn--check">出勤</button>
 
