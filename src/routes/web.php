@@ -27,7 +27,9 @@ use App\Http\Controllers\AdminController;
     ->middleware('auth')->name('logout');
 
 // PG03 勤怠登録画面**************************************************************************************
-    Route::get('/attendance', [AuthController::class, 'attendance'])->name('attendance');
+    Route::get('/attendance', [AttendanceController::class, 'create'])->middleware(['auth'])->name('attendance.create');
+
+    Route::post('/attendance', [AttendanceController::class, 'store'])->middleware(['auth'])->name('attendance.store');
 
 
 

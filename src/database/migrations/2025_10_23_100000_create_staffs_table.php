@@ -1,5 +1,5 @@
 <?php
-// 社員管理テーブル
+// Staffs(社員管理テーブル)
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
+        Schema::create('staffs', function (Blueprint $table) {
             // ID
             $table->id();
             // 社員名
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email', 255)->unique();
             // パスワード
             $table->string('password', 255)->unique();;
-            // 管理者権限判断　false:社員　true:管理者
+            // 管理者権限判断　0:社員　1:管理者
             $table->boolean('is_admin')->default(false);
             // Fortify 2要素認証カラム
             $table->text('two_factor_secret')->nullable();
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staff');
+        Schema::dropIfExists('staffs');
     }
 };

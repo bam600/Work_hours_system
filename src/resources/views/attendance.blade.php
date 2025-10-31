@@ -31,31 +31,32 @@
 {{--以下会員登録フォーム--}}
 @section('content')  
 
-{{--登録を行うPOSTの送信先に、名前付きルート register.store を使用。--}}
-<form action="{{ route('register.store') }}" method="POST">
-    @csrf
-
 <div class="register-wrapper">
     <div class="textback">
-        <h2 class="lavel">勤怠外</h2>
+        <h2 class="label">{{ $statusLabel }}</h2>
     </div>
 
-@php
-    use Carbon\Carbon;
-    $today = Carbon::now();
-@endphp
+<!-- 今日の日付を取得 -->
+<P class="today">{{ $now->isoFormat('YYYY年M月D日(ddd)') }}</P>
+<!-- 今日の時間を取得 -->
+<p class="time">{{ $now->setTimezone('Asia/Tokyo')->format('H:i') }}</p>
 
-<P class="today">{{ \Carbon\Carbon::now()->isoFormat('YYYY年M月D日(ddd)') }}</P>
-<p class="time">{{ \Carbon\Carbon::now()->setTimezone('Asia/Tokyo')->format('H:i') }}</p>
+    @if(empty($todayAttendance))
+    
+        <form method="POST" action="{{ route('attendance.store') }}">
+            @csrf
+            <!-- status:checkin=出勤になる -->
+            <button type="submit" name="status" value="checkin" class="btn--check">出勤</button>
+        </form>
 
-    <button type="submit" class="btn--check">出勤</button>
+    @elseif($todayAttendance->status=='checkin')
+    <button type="submit" name="checkout" class="btn--check">退勤</button>
+    <button type="submit" name="break" class="btn--break">休憩入</button>
+    @endif
+    <!-- <button type="submit" name="endbreak" class="btn--break">休憩戻</button> -->
 
-    <button type="submit" class="btn--check">退勤</button>
-    <button type="submit" class="btn--break">休憩入</button>
-
-    <button type="submit" class="btn--break">休憩戻</button>
-
-    <button type="submit" class="btn--end">お疲れさまでした</button>
+    <!-- <p>お疲れさまでした</p>
+-->
 
 </div>
 

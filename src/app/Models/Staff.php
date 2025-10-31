@@ -14,7 +14,16 @@ class Staff extends Authenticatable
 {
     use Notifiable;
     use HasFactory;
+    
     // $fillableで安全に代入可能なカラムを明示。無い場合create()は使えない
+    protected $table = 'staffs';
+
     protected $fillable = ['user_name','email','password','is_admin'];
+
+    // 勤怠記録とのリレーション（1対多）
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 
 }
