@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 //! 会員登録処理を担当するRegisterControllerを読み込むshow()やstore()メソッドが使える
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AttendanceListController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -30,6 +31,12 @@ use App\Http\Controllers\AdminController;
     Route::get('/attendance', [AttendanceController::class, 'create'])->middleware(['auth'])->name('attendance.create');
 
     Route::post('/attendance', [AttendanceController::class, 'store'])->middleware(['auth'])->name('attendance.store');
+
+// PG04 勤怠一覧画面**************************************************************************************
+    Route::get('/attendance/list', [AttendanceListController::class, 'create'])->middleware(['auth'])->name('list.create');
+
+    Route::post('/attendance/list',[AttendanceListController::class, 'store'])->middleware(['auth'])->name('attendancelist.store');
+
 
 
 

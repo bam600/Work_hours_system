@@ -28,7 +28,7 @@ class Attendance extends Model
     //休憩時間とのリレーション(多対多)
     public function breaks()
     {
-    return $this->belongsToMany(BreakModel::class);
+        return $this->hasMany(BreakModel::class, 'attendance_id');
     }
 
 }

@@ -15,15 +15,28 @@
 
 @section('header')
     @if (Auth::check())
-        <div class="header__links">
-            <a class="link" href="{{ route('login') }}">勤怠一覧</a>
-            <a class="link" href="{{ route('login') }}">勤怠</a>
-            <a class="link" href="{{ route('login') }}">申請</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="btm">ログアウト</button>
-            </form>
-        </div>
+        @if ($todayAttendance && $todayAttendance->status === 'checkout')
+            {{-- 退勤済みのときだけ表示するヘッダー --}}
+            <div class="header__links">
+                <a class="link" href="{{ route('list.create') }}">今月の勤怠一覧</a>
+                <a class="link" href="{{ route('attendance.create') }}">申請一覧</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btm">ログアウト</button>
+                </form>
+            </div>
+        @else
+            {{-- それ以外（出勤中・休憩中・未出勤）のときのヘッダー --}}
+            <div class="header__links">
+                <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
+                <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
+                <a class="link" href="/{{ route('attendance.create') }}">申請</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btm">ログアウト</button>
+                </form>
+            </div>
+        @endif
     @endif
 @endsection
 
@@ -39,26 +52,50 @@
 <!-- 今日の日付を取得 -->
 <P class="today">{{ $now->isoFormat('YYYY年M月D日(ddd)') }}</P>
 <!-- 今日の時間を取得 -->
-<p class="time">{{ $now->setTimezone('Asia/Tokyo')->format('H:i') }}</p>
+<p class="time">{{ $now->format('H:i') }}</p>
 
-    @if(empty($todayAttendance))
-    
-        <form method="POST" action="{{ route('attendance.store') }}">
-            @csrf
-            <!-- status:checkin=出勤になる -->
-            <button type="submit" name="status" value="checkin" class="btn--check">出勤</button>
-        </form>
 
-    @elseif($todayAttendance->status=='checkin')
-    <button type="submit" name="checkout" class="btn--check">退勤</button>
-    <button type="submit" name="break" class="btn--break">休憩入</button>
-    @endif
-    <!-- <button type="submit" name="endbreak" class="btn--break">休憩戻</button> -->
+{{-- ステータス表示 --}}
+@if($todayAttendance && $todayAttendance->status)
+    <p style="display: none;">ステータス：{{ $statusLabel }}</p>
+@else
+    <p style="display: none;">ステータス：勤務外</p>
+@endif
 
-    <!-- <p>お疲れさまでした</p>
--->
+{{-- 出勤ボタン or 出勤済み表示 --}}
+@if(!$todayAttendance)
+    <form method="POST" action="{{ route('attendance.store') }}">
+        @csrf
+        <button type="submit" name="status" value="checkin" class="btn--check">出勤</button>
+    </form>
+@else
+    <p style="display: none;">本日はすでに出勤済みです（{{ $clockInTime }}）</p>
+@endif
 
-</div>
+{{-- 出勤中 or 休憩戻り --}}
+@if($todayAttendance && ($todayAttendance->status === 'checkin' || $todayAttendance->status === 'endbreak'))
+    <form method="POST" action="{{ route('attendance.store') }}">
+        @csrf
+        <button type="submit" name="status" value="break" class="btn--break">休憩入</button>
+        <button type="submit" name="status" value="checkout" class="btn--check">退勤</button>
+    </form>
+@endif
 
+{{-- 休憩中 --}}
+@if($todayAttendance && $todayAttendance->status === 'break')
+    <form method="POST" action="{{ route('attendance.store') }}">
+        @csrf
+        <button type="submit" name="status" value="endbreak" class="btn--break">休憩戻</button>
+    </form>
+@endif
+
+{{-- 退勤済み --}}
+@if($todayAttendance && $todayAttendance->status === 'checkout')
+    <div class="text--end">お疲れさまでした。</div>
+@endif
+
+@error('status')
+    <div class="alert alert-danger">{{ $message }}</div>
+@enderror
 
 @endsection

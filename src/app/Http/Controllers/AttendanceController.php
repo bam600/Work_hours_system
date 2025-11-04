@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 // - Auth：Laravelの認証ファサード。Auth::attempt() などでログイン処理を行う。
 use Illuminate\Support\Facades\Auth;
-// LoginRequest：バリデーションルールを定義したフォームリクエスト。loginstore() の引数で使用されます。
+use App\Http\Requests\AttendanceRequest;
 use Illuminate\Http\Request;
+use App\Models\BreakModel;
 use App\Models\Attendance;
 use Carbon\Carbon;
 
@@ -26,28 +27,21 @@ class AttendanceController extends Controller
             // 最初の1件だけ取得
             ->first();
 
-        // 勤怠ステータスの初期設定
-        $statusLabel = '勤務外';
+        // clock_in を Carbon に変換（ビューで使うならここで整形）
+        $clockInTime = $todayAttendance ? \Carbon\Carbon::parse($todayAttendance->clock_in)->format('H:i') : null;
 
-        // ステータスに変更があれば判定して上書き
-        if ($todayAttendance && $todayAttendance->status !== null) {
-            $labels = [
-                'checkin' => '出勤中',
-                'break' => '休憩中',
-                'endbreak' => '出勤中',//休憩後の勤務再開
-                'checkout' => '退勤',
-            ];
 
-    // statusに該当するlabelを取り出して格納。未定義だったら不明な状態を格納
-    $statusLabel = $labels[$todayAttendance->status] ?? '不明な状態';
-}
+        $statusLabel = $todayAttendance ? $this->getStatusLabel($todayAttendance->status) : '勤務外';
+
+        // 管理者か否か判定
+        $isAdmin = Auth::user()->is_admin;
 
         // $todayAttendanceの情報を渡す。勤怠登録画面に遷移
-        return view('attendance', compact('todayAttendance','now','statusLabel'));
+        return view('attendance', compact('todayAttendance','now','statusLabel','clockInTime','isAdmin')); 
     }
 
     // 今日の勤怠を保存
-    public function store(Request $request)
+    public function store(AttendanceRequest $request)
     {   
         // 勤怠ステータスの保存
         $status = $request->input('status'); // 'checkin' など
@@ -61,36 +55,43 @@ class AttendanceController extends Controller
         ->whereDate('created_at', $now->toDateString())
         // 最初の1件だけ取得
         ->first();
+        
+
+        if (!$todayAttendance && $status !== 'checkin') {
+            return redirect()->route('attendance.create')->withErrors('勤怠記録が見つかりません。');
+    }
 
         // ステータスの条件分岐
         switch ($status) {
             // 出勤
             case 'checkin':
+                // 出勤の重複check
+                if ($todayAttendance) {
+                    return redirect()->route('attendance.create')->withErrors('本日の出勤記録はすでに存在します。');
+                }
                 // Attendance新たなテーブルを作成
                 Attendance::create([
                     'staff_id' => auth()->id(),
                     'status' => 'checkin',
                     'clock_in' => $now,
-                    'created_at' => $now,
-                    'updated_at' => $now,
                 ]);
             break;
             
             // 休憩
             case 'break':
                 // Attendanceモデルに今日の分のレコードが存在したら
+                // 紐づくBreakモデルを呼び出し新しいレコードを作成
                 if ($todayAttendance) {
-                    // 紐づくBreakモデルを呼び出し新しいレコードを作成
-                    $todayAttendance->breaks()->create([
+                    BreakModel::create([
+                        'attendance_id' => $todayAttendance->id,
                         'start_time' => $now,
-                        'created_at' => $now,
-                        'updated_at' => $now,
                     ]);
-                    // Attendanceモデルの該当するレコードのステータスを更新
-                    $todayAttendance->update([
+                    
+                        // Attendanceモデルの該当するレコードのステータスを更新
+                        $todayAttendance->update([
                         'status' => 'break',
-                    ]);
-                }
+                        ]);
+                    }
             break; 
 
             // 休憩戻り出勤中
@@ -113,6 +114,11 @@ class AttendanceController extends Controller
 
             // 退勤
             case 'checkout':
+                // 休憩中の場合退勤できない
+                if ($todayAttendance->status === 'break') {
+                    return redirect()->route('attendance.create')
+                    ->withErrors('先に休憩を終了してください');
+                }
                     // Attendanceテーブルの該当するレコードを更新
                     $todayAttendance->update([
                         'clock_out' => $now,
@@ -120,21 +126,21 @@ class AttendanceController extends Controller
                     ]);
             break; 
                 }
-
-        // ステータスに変更があれば判定して上書き
-        if ($todayAttendance && $todayAttendance->status !== null) {
-            $labels = [
-                'checkin' => '出勤中',
-                'break' => '休憩中',
-                'endbreak' => '出勤中',//休憩後の勤務再開
-                'checkout' => '退勤',
-        ];
-    }
-
-    $statusLabel = $labels[$todayAttendance->status] ?? '不明な状態';
-        
         // 登録後ルート名attendance(/attendance)に遷移
-        return redirect()->route('attendance');
+        return redirect()->route('attendance.create');
+
     }
-        
+
+//statusに入力があったら該当するラベルに書き換える 
+private function getStatusLabel($status)
+    {
+        $labels = [
+            'checkin' => '出勤中',
+            'break' => '休憩中',
+            'endbreak' => '出勤中',
+            'checkout' => '退勤',
+        ];
+
+        return $labels[$status] ?? '不明な状態';
+    }
 }
