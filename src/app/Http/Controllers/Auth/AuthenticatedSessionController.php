@@ -10,10 +10,23 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;             //Request：HTTPリクエストを受け取るため。
 use Illuminate\Support\Facades\Auth;    //Auth：Laravelの認証ファサード。ログイン・ログアウト処理に使用
 use App\Http\Controllers\Controller;   //Laravelの基本コントローラークラス。これを継承して機能を拡張
+use App\Models\Profile;
+
 
 
 class AuthenticatedSessionController extends Controller
 {   
+        public function create(Request $request)  
+    {   
+        return view('auth.login'); // ← ログアウト後にログイン画面へ
+    }
+
+    public function showAdminLoginForm()
+    {
+    return view('auth.adminlogin'); // ← 管理者用ログイン画面
+    }
+
+
     /**
      * ユーザがログアウト処理を
      * 行ったときに呼ばれるメソッド
@@ -52,9 +65,24 @@ public function store(Request $request)
         ])->withInput();
     }
 
-    // ログイン成功時の処理
+    $user = Auth::user();
     $request->session()->regenerate();
-    return redirect()->intended('/attendance');
+
+    \Log::debug('ログインユーザー:', ['id' => $user->id, 'is_admin' => $user->is_admin]);
+    \Log::debug('アクセスパス:', ['path' => $request->path()]);
+
+    // アクセス元URLで分岐！
+    if (str_starts_with($request->path(), 'admin')) {
+    if ((int)$user->is_admin !== 1) {
+        Auth::logout();
+        return back()->withErrors([
+            'auth' => '管理者のみログイン可能です',
+        ])->withInput();
+    }
+    return redirect('/attendance/list');
 }
 
+    // 一般ユーザー用の遷移
+    return redirect('/attendance');
+}
 }

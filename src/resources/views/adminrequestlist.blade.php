@@ -1,10 +1,10 @@
-{{-- PG04 勤怠一覧画面(一般) --}}
+{{-- PG08 勤怠一覧画面(管理者) --}}
 
 {{--共通レイアウトの継承--}}
 @extends('layouts.app')  
 
 {{--タグタイトル--}}
-@section('title', '勤怠一覧画面') 
+@section('title', '勤怠一覧画面(管理者)') 
 
 {{--専用CSSを読み込む---}}
 @section('head')    
@@ -17,8 +17,8 @@
     @if (Auth::check())
             <div class="header__links">
                 <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
-                <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
-                <a class="link" href="{{ route('login') }}">申請</a>
+                <a class="link" href="{{ route('attendance.create') }}">スタッフ一覧</a>
+                <a class="link" href="{{ route('login') }}">申請一覧</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btm">ログアウト</button>
@@ -31,25 +31,25 @@
 @section('content')  
 
 <div class="register-wrapper">
-    <h2 class="label">❙ 勤怠一覧</h2>
+    <h2 class="label">❙ {{ $date->format('Y年m月d日') }}の一覧</h2>
 </div>
 
 @php
-    $prevMonth = $date->copy()->subMonth()->format('Y-m');
-    $nextMonth = $date->copy()->addMonth()->format('Y-m');
+    $prevMonth = $date->copy()->subMonth()->format('Y-m-d');
+    $nextMonth = $date->copy()->addMonth()->format('Y-m-d');
 @endphp
 
 <table class="monthtable">
     <tr colspan="3">
-    <a href="{{ route('list.create', ['month' => $prevMonth]) }}" class="labelleft">←前月</a>
-    <th class="monthlabel">📅{{ $date->format('Y/m') }}</th>
-    <a href="{{ route('list.create', ['month' => $nextMonth]) }}" class="labelright">翌月→</a>
+    <a href="{{ route('list.create', ['month' => $prevMonth]) }}" class="labelleft">←前日</a>
+    <th class="monthlabel">📅{{ $date->format('Y/m/d') }}</th>
+    <a href="{{ route('list.create', ['month' => $nextMonth]) }}" class="labelright">翌日→</a>
     </tr>
 </table>
 
 <table class="listtable">
     <tr>
-        <th class="listleft1">日付</th>
+        <th class="listleft1">名前</th>
         <th class="listleft2">出勤</th>
         <th class="listleft2">退勤</th>
         <th class="listleft2">休憩</th>

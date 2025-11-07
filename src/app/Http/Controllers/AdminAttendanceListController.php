@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BreakModel;
-use App\Models\Attendance;
-use Carbon\Carbon;
 
-class AttendanceListController extends Controller
+class AdminAttendanceListController extends Controller
 {
     public function create(Request $request)
     {
@@ -117,4 +114,3 @@ class AttendanceListController extends Controller
         return view('attendancelist', compact('dailyRecords','date'));
     }
 }
-    

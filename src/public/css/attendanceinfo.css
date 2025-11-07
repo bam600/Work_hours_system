@@ -1,5 +1,5 @@
 /* ===============================
-    勤怠一覧画面(社員)
+    勤怠詳細画面(社員)
    =============================== */
 
 /* 全体のラッパー（中央寄せ） */
@@ -32,49 +32,6 @@ body {
     display: block;
 }
 
-
-/* 日付項目テーブル */
-table.monthtable{
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    margin-bottom: 50px;
-}
-table.monthtable th {
-    width: 33%;
-    padding: 15px;
-    background-color: #fff;
-    font-weight: bold;
-}
-/* 日付項目　中央 */
-.monthlabel{
-    font-family: 'Inter', sans-serif;
-    color:#000;
-    font-size: 20px;
-}
-/* 日付項目　左 */
-.labelleft {
-    text-align: left;
-    padding-left: 0;
-    font-family: 'Inter', sans-serif;
-    color: #737373;
-    font-size: 20px;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-}
-/* 日付項目　右 */
-.labelright {
-    text-align: right;
-    padding-right: 0;
-    font-family: 'Inter', sans-serif;
-    color: #737373;
-    font-size: 20px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
-
-
-
 /* 一覧テーブル */
 table.listtable {
     width: 100%;
@@ -82,55 +39,53 @@ table.listtable {
     border-collapse: collapse;
     text-align: center;
     padding-top:30px;
-}
-/* 一覧テーブルの項目 */
-table.listtable th {
-    width: calc(100% / 6); 
-    padding: 15px;
     background-color: #fff;
-    font-weight: bold;
+}
+
+/* 行全体の高さを指定 */
+tr {
+    height: 100px;
+    /* 必要に応じて数値を調整してね */
 }
 
 
 
-/* 一覧　日付 */
-.listleft1 {
-    padding-left: 0;
+
+/* 項目1段目 */
+.list1 {
+    padding-left: 20px;
+    text-align: left;
     font-family: 'Inter', sans-serif;
     color: #737373;
     font-size: 18px;
-    border-top-left-radius: 15px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
-
-/* 一覧　出勤 */
-.listleft2 {
-    padding-left: 0;
+/* 項目真ん中 */
+.list2 {
+    padding-left: 20px;
+    text-align: left;
     font-family: 'Inter', sans-serif;
     color: #737373;
     font-size: 18px;
 }
-
-/* 一覧　休憩 */
-.listleft3 {
-    padding-right: 0;
+/*項目最後*/
+.list3 {
+    padding-left: 20px;
+    text-align: left;
     font-family: 'Inter', sans-serif;
     color: #737373;
     font-size: 18px;
-    border-top-right-radius: 15px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
-/* 一覧　検索結果 */
-.listleft4{
-        padding-right: 0;
-        font-family: 'Inter',
-        sans-serif;
-        color: #737373;
-        font-size: 18px;
-}
-
-/* 検索結果の間隔設定 */
-.find{
-    margin-top:20px;
+.attendancelist{
+    padding-left: 20px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    color: #000;
+    font-size: 18px;
 }
 
 

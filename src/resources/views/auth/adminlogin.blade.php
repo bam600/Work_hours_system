@@ -4,7 +4,7 @@
 @extends('layouts.app')  
 
 {{--タグタイトル--}}
-@section('title', 'ログイン(社員)') 
+@section('title', 'ログイン(管理者)') 
 
 {{--専用CSSを読み込む---}}
 @section('head')    
@@ -22,9 +22,8 @@
         <div class="alert info">{{ session('status') }}</div>
     @endif
 
-<form method="POST" action="{{ route('login') }}">
+<form method="POST" action="{{ route('admin.store') }}">
     @csrf
-
     <div class="form-group">
         <label for="email">メールアドレス</label>
         <input type="text" id="email" name="email" value="{{ old('email') }}"/>
