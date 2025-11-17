@@ -21,6 +21,8 @@ class CreateAttendancesTable extends Migration
             $table->timestamp("clock_in")->nullable();;
             // 退勤時間
             $table->timestamp("clock_out")->nullable();;
+            // 申請画面の備考欄
+            $table->text('note')->nullable();
             // 勤怠時間
             $table->time("actual_work_time")->nullable();
             // 勤怠ステータス

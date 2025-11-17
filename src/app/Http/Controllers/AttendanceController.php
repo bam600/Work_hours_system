@@ -138,7 +138,7 @@ private function getStatusLabel($status)
             'checkin' => '出勤中',
             'break' => '休憩中',
             'endbreak' => '出勤中',
-            'checkout' => '退勤',
+            'checkout' => '退勤済',
         ];
 
         return $labels[$status] ?? '不明な状態';

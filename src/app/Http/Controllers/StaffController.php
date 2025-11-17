@@ -1,19 +1,20 @@
 <?php
-
+// PG12 スタッフ別勤怠一覧(管理者)
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\BreakModel;
+use App\Models\Staff;
 use App\Models\Attendance;
 use Carbon\Carbon;
 
-class AttendanceListController extends Controller
+class StaffController extends Controller
 {
-    public function create(Request $request)
+    public function show(Request $request, $id, $month = null)
     {
         /**当月を取得 */
-        $month = $request->input('month', Carbon::today()->format('Y-m'));
-        $date = Carbon::createFromFormat('Y-m', $month)->startOfMonth();;
+        $month = $month ?? Carbon::today()->format('Y-m');
+        $date = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
 
         /**月初・月末の定義を先に！*/
         $startOfMonth = $date->copy()->startOfMonth();
@@ -28,15 +29,16 @@ class AttendanceListController extends Controller
         /**合計時間の初期化 */
         $totalMinutes = 0;
 
-\Log::debug('対象月: ' . $month);
 
         /**ログイン中スタッフauth()->id()の
-         * 該当月に出勤clock_inしたレコードを取得
+         * 該当月に出勤clock_inしたレコードを取得　スタッフ名も取得
          * */
-        $targetDays = Attendance::with('breaks') // ← これを追加！
-            ->where('staff_id', auth()->id())
+         $targetDays = Attendance::with(['staff', 'breaks']) // staffリレーションを読み込む
+            ->where('staff_id', $id)
             ->whereBetween('clock_in', [$startOfMonth, $endOfMonth])
             ->get();
+
+        $staff = Staff::findOrFail($id);
 
         /**
          * その月の1日から最終日まで順番にループ
@@ -56,6 +58,8 @@ class AttendanceListController extends Controller
             'work_time' => '',
             'break_time' => '',
         ];
+
+        $workMinutes = 0; // ← ここを追加
 
         /**その日に出勤したレコードを
          * $targetDaysの中から1件だけ探す
@@ -86,7 +90,7 @@ class AttendanceListController extends Controller
             $totalMinutes += $workMinutes;
             }
 
-
+            
         $breakMinutes = 0;
         if ($targetDay) {
             foreach ($targetDay->breaks as $break) {
@@ -101,24 +105,22 @@ class AttendanceListController extends Controller
 
         if ($breakMinutes > 0) {
             $record['break_time'] = sprintf('%02d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
-        } elseif ($targetDay && $targetDay->clock_out && count($targetDay->breaks) === 0) {
-            // 出勤・退勤はあるけど休憩レコードがない場合
-            $record['break_time'] = '0:00';
-        } elseif ($targetDay && count($targetDay->breaks) > 0) {
-            // 休憩レコードはあるけど時間が未入力
-            $record['break_time'] = '0:00';
         } else {
-            // 出勤してない or レコードなし
-            $record['break_time'] = null;
+            $record['break_time'] = '';
         }
 
+        // 実働時間 = 勤務時間 - 休憩時間
+        $actualMinutes = max(0, $workMinutes - $breakMinutes);
+        $record['actual_work_time'] = sprintf('%02d:%02d', floor($actualMinutes / 60), $actualMinutes % 60);
+        
         $record['id'] = $targetDay?->id;
         $dailyRecords[] = $record;
+} 
+    
+        /**データを渡して勤怠一覧に戻る。*/
+        $firstRecord = $targetDays->first();
+        return view('staff', compact('dailyRecords','date','id','firstRecord','staff'));
 
     }
-        /**データを渡して勤怠一覧に戻る。*/
-        return view('attendancelist', compact('dailyRecords','date'));
-
 }
     
-}

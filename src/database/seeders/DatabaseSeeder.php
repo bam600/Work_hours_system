@@ -10,7 +10,9 @@ class DatabaseSeeder extends Seeder
     {
         // StaffSeeder と IsAdminUserSeeder を呼び出す
         $this->call([
-            StaffSeeder::class,
+            // StaffSeeder::class,
+            // AttendanceSeeder::class,
+            BreakSeeder::class,
         ]);
     }
 }

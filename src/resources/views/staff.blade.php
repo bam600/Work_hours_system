@@ -1,10 +1,10 @@
-{{-- PG04 勤怠一覧画面(一般) --}}
+{{-- PG12 スタッフ別勤怠一覧画面（管理者） --}}
 
 {{--共通レイアウトの継承--}}
 @extends('layouts.app')  
 
 {{--タグタイトル--}}
-@section('title', '勤怠一覧画面') 
+@section('title', 'スタッフ別勤怠') 
 
 {{--専用CSSを読み込む---}}
 @section('head')    
@@ -16,9 +16,9 @@
 @section('header')
     @if (Auth::check())
             <div class="header__links">
-                <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
                 <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
-                <a class="link" href="{{route('request.list')}}">申請</a>
+                <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
+                <a class="link" href="{{ route('login') }}">申請</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btm">ログアウト</button>
@@ -31,7 +31,7 @@
 @section('content')  
 
 <div class="register-wrapper">
-    <h2 class="label">❙ 勤怠一覧</h2>
+    <h2 class="label">❙{{ $staff->user_name }}さんの勤怠一覧</h2>
 </div>
 
 @php
@@ -42,11 +42,12 @@
 <table class="monthtable">
     <tr>
         <th class="labelleft">
-            <a href="{{ route('list.create', ['month' => $prevMonth]) }}">←前月</a>
+            <a href="{{ route('staff.attendance', ['id' => $id, 'month' => $prevMonth]) }}">←前月</a>
         </th>
-        <th colspan="4" class="monthlabel">📅{{ $date->format('Y/m') }}</th>
+
+        <th colspan="4"class="monthlabel">📅{{ $date->format('Y/m') }}</th>
         <th class="labelright">
-            <a href="{{ route('list.create', ['month' => $nextMonth]) }}" class="labelright">翌月→</a>
+            <a href="{{ route('staff.attendance', ['id' => $id, 'month' => $nextMonth]) }}">翌月→</a>
         </th>
     </tr>
 </table>
@@ -68,9 +69,9 @@
             <th class="listleft4">{{ $record['clock_in'] }}</th>
             <th class="listleft4">{{ $record['clock_out'] }}</th>
             <th class="listleft4">{{ $record['break_time'] }}</th>
-            <th class="listleft4">{{ $record['work_time'] }}</th>
+            <th class="listleft4">{{ $record['actual_work_time'] }}</th>
         @if (!empty($record['id']))
-            <th><a class="infobtm" href="{{ route('attendance.info', ['id' => $record['id']]) }}">詳細</a></th>
+            <th><a href="{{ route('attendance.info', ['id' => $record['id']]) }}">詳細</a></th>
         @else
             <th>詳細</th>
         @endif

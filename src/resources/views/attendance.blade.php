@@ -30,7 +30,7 @@
             <div class="header__links">
                 <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
                 <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
-                <a class="link" href="/{{ route('attendance.create') }}">申請</a>
+                <a class="link" href="{{ route('request.list') }}">申請</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btm">ログアウト</button>

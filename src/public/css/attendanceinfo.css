@@ -25,7 +25,7 @@ body {
     font-family: 'Inter', sans-serif;
     font-size: 32px;
     font-weight: 700;
-    margin-bottom: -100px;
+    margin-bottom: -90px;
     color: #000;
     margin-left: 0;
     text-align: left;
@@ -36,60 +36,184 @@ body {
 table.listtable {
     width: 100%;
     height: 60%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 5px;
     text-align: center;
     padding-top:30px;
+    margin: 0 auto;
     background-color: #fff;
 }
 
+/* テーブルの最初の行の左上と右上の角を丸く */
+.listtable tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+.listtable tr:first-child td:last-child,
+.listtable tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+/* テーブルの最後の行の左下と右下の角を丸く */
+.listtable tr:last-child th:first-child {
+    border-bottom-left-radius: 12px;
+}
+
+.listtable tr:last-child td:last-child,
+.listtable tr:last-child th:last-child {
+    border-bottom-right-radius: 12px;
+}
+
+
+
+
+
 /* 行全体の高さを指定 */
 tr {
-    height: 100px;
+    height: 80px;
     /* 必要に応じて数値を調整してね */
 }
 
 
 
-
 /* 項目1段目 */
 .list1 {
-    padding-left: 20px;
+    padding-left: 40px;
     text-align: left;
     font-family: 'Inter', sans-serif;
     color: #737373;
     font-size: 18px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    margin-top: 10px;
+    margin-bottom: 2ch;
 }
 /* 項目真ん中 */
 .list2 {
-    padding-left: 20px;
+    padding-left: 40px;
     text-align: left;
     font-family: 'Inter', sans-serif;
     color: #737373;
     font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 /*項目最後*/
 .list3 {
-    padding-left: 20px;
+    padding-left: 40px;
     text-align: left;
     font-family: 'Inter', sans-serif;
     color: #737373;
     font-size: 18px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .attendancelist{
-    padding-left: 20px;
+    padding-left: 40px;
     text-align: center;
     font-family: 'Inter', sans-serif;
     color: #000;
     font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.clockinout {
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    /* 要素間の余白 */
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    word-spacing: 20px;
+}
+
+/* 入力欄のサイズ調整 */
+.clockinout input[type="text"] {
+    font-family: 'Inter', sans-serif;
+    width: 100px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.clockinout textarea {
+    width: 300px;
+    height: 120px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    /* 文字サイズ */
+    line-height: 1.6;
+    /* 行と行の間隔 */
+    letter-spacing: 0.05em;
+    /* 文字と文字の間隔 */
+    text-align: left;
+    /* 左寄せ（center だと読みにくいかも） */
+    border: 1px solid #000;
+    border-radius: 6px;
+    padding: 8px;
+    /* 内側の余白を少し広めに */
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* 修正ボタン */
+/* ボタン */
+.btn--primary {
+    width: 15%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-top: 40px;
+    float: right;
+
+}
+
+table.listtable {
+    border-collapse: separate;
+    /* ← これが必要！ */
+    border-spacing: 0 5px;
+    /* ← 横0px、縦12pxの隙間 */
+}
+
+.listtable th,
+.listtable td {
+    padding: 12px;
+    border-bottom: 3px solid #eee;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+    display: block;
+}
+
+/* コメント */
+.comment {
+    font-family: 'Inter', sans-serif;
+    /* 文字サイズを大きめに*/
+    font-size: 16px;
+    /*文字色を白に*/
+    color: #FF0000;
+    text-align: right;
 }
 
 
-/* =========================
+
+/* ==========out===============
 PC対応（1400〜1540px）
 ========================= */
 @media (min-width: 1400px) and (max-width: 1540px) {

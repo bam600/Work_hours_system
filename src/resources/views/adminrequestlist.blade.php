@@ -16,9 +16,9 @@
 @section('header')
     @if (Auth::check())
             <div class="header__links">
-                <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
-                <a class="link" href="{{ route('attendance.create') }}">スタッフ一覧</a>
-                <a class="link" href="{{ route('login') }}">申請一覧</a>
+                <a class="link" href="{{route('list.create') }}">勤怠一覧</a>
+                <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
+                <a class="link" href="{{ route('request.list') }}">申請一覧</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btm">ログアウト</button>
@@ -31,19 +31,29 @@
 @section('content')  
 
 <div class="register-wrapper">
+    @if(isset($date))
     <h2 class="label">❙ {{ $date->format('Y年m月d日') }}の一覧</h2>
+@else
+    <h2 class="label">❙ 日付未取得</h2>
+@endif
 </div>
 
 @php
-    $prevMonth = $date->copy()->subMonth()->format('Y-m-d');
-    $nextMonth = $date->copy()->addMonth()->format('Y-m-d');
+    $prevDate = $date->copy()->subDay()->format('Y-m-d');
+    $nextDate = $date->copy()->addDay()->format('Y-m-d');
 @endphp
 
 <table class="monthtable">
-    <tr colspan="3">
-    <a href="{{ route('list.create', ['month' => $prevMonth]) }}" class="labelleft">←前日</a>
-    <th class="monthlabel">📅{{ $date->format('Y/m/d') }}</th>
-    <a href="{{ route('list.create', ['month' => $nextMonth]) }}" class="labelright">翌日→</a>
+    <tr>
+        <th class="labelleft">
+            <a href="{{ route('adminrequest.list', ['date' => $prevDate]) }}" class="labelleft">← 前日</a>
+        </th>
+        <th colspan="4" class="monthlabel">
+            📅{{ $date->format('Y年m月d日') }}
+        </th>
+        <th class="labelright">
+            <a href="{{ route('adminrequest.list', ['date' => $nextDate]) }}"" class="labelright">翌日→</a>
+        </th>
     </tr>
 </table>
 
@@ -58,19 +68,23 @@
     </tr>
 
     <!-- 検索結果↓ -->
+    @if(isset($dailyRecords) && count($dailyRecords) > 0)
     @foreach($dailyRecords as $record)
         <tr class="find">
-            <th class="listleft4">{{ $record['date'] }}（{{ $record['weekday'] }}）</th>
-            <th class="listleft4">{{ $record['clock_in'] }}</th>
+            <th class="listleft4">{{ $record['staff_name']}}</th>
+            <th class="listleft4">{{ $record['clock_in']}}</th>
             <th class="listleft4">{{ $record['clock_out'] }}</th>
             <th class="listleft4">{{ $record['break_time'] }}</th>
             <th class="listleft4">{{ $record['work_time'] }}</th>
-        @if (!empty($record['id']))
-            <th><a href="{{ route('attendance.info', ['id' => $record['id']]) }}">詳細</a></th>
-        @else
-            <th>詳細</th>
-        @endif
+    @if (!empty($record['staff_id']))
+    <th>
+        <a href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a>
+    </th>
+    @else
+        <th>詳細</th>
+    @endif
         </tr>
     @endforeach
+    @endif
 </table>
 @endsection

@@ -1,10 +1,10 @@
-{{-- PG05 勤怠詳細画面 --}}
+{{-- PG09 勤怠詳細画面(管理者) --}}
 
 {{--共通レイアウトの継承--}}
 @extends('layouts.app')  
 
 {{--タグタイトル--}}
-@section('title', '勤怠詳細') 
+@section('title', '勤怠詳細(管理者)') 
 
 {{--専用CSSを読み込む---}}
 @section('head')    
@@ -14,16 +14,16 @@
 @endsection
 
 @section('header')
-    @if (Auth::check())
-            <div class="header__links">
-                <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
-                <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
-                <a class="link" href="{{ route('request.list') }}">申請</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btm">ログアウト</button>
-                </form>
-            </div>
+    @if (Auth::check() && Auth::user()->is_admin == "1")    
+        <div class="header__links">
+            <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
+            <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
+            <a class="link" href="{{ route('request.list') }}">申請</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btm">ログアウト</button>
+            </form>
+        </div>
     @endif
 @endsection
 
@@ -35,7 +35,6 @@
 
 <form action="{{ route('attendance.submit', ['id' => $attendance->id]) }}" method="POST">
     @csrf
-
     @php
         $editable = $editable ?? true;
     @endphp
@@ -81,7 +80,7 @@
         @if ($editable)
             <input type="text" name="break_start[]" value="{{ old("break_start.$index", \Carbon\Carbon::parse($break->start_time)->format('H:i')) }}">
             ～
-            <input type="text" name="break_end[]" value="{{ old("break_end.$index", \Carbon\Carbon::parse($break->end_time)->format('H:i')) }}">
+            <input type="text" name="break_end[]" value="{{ old("break_end.$index", \Carbon\Carbon::parse($break->end_time)->format('H:i'))}}">
 
             @if ($errors->has("break_start.$index"))
                 <div class="error">{{ $errors->first("break_start.$index") }}</div>

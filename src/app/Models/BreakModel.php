@@ -15,15 +15,7 @@ class BreakModel extends Model
             'attendance_id',
             'start_time',
             'end_time',
-            'created_at',
-            'updated_at',
         ];
-
-    // 社員テーブルとのリレーション（1対多）
-    public function staff()
-    {
-        return $this->belongsTo(Staff::class);
-    }
 
     // 勤怠時間管理テーブルとのリレーション
     public function attendance()

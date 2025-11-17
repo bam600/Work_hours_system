@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\AttendRequest;
+use App\Models\Attendance;
 
 // 新規登録及びプロフィール登録画面用
 /**
@@ -24,6 +26,12 @@ class Staff extends Authenticatable
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    // 勤怠申請とのリレーション（1対多）
+    public function attendrequest()
+    {
+        return $this->hasMany(AttendRequest::class);
     }
 
 }

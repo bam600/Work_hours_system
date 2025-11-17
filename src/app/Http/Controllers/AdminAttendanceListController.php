@@ -1,116 +1,75 @@
 <?php
-
+// 管理者用勤怠一覧
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Attendance;
+use App\Models\Staff;
+use Carbon\Carbon;
 
 class AdminAttendanceListController extends Controller
 {
-    public function create(Request $request)
+    public function adminrequestlist(Request $request)
     {
-        /**当月を取得 */
-        $month = $request->input('month', Carbon::today()->format('Y-m'));
-        $date = Carbon::createFromFormat('Y-m', $month)->startOfMonth();;
+        /**当日を取得 */
+        $date = $request->input('date') ? Carbon::parse($request->input('date')) : Carbon::today();
 
-        /**月初・月末の定義を先に！*/
-        $startOfMonth = $date->copy()->startOfMonth();
-        $endOfMonth = $date->copy()->endOfMonth();
+        $attendances = Attendance::with(['staff','breaks'])
+            ->whereNotNull('clock_in')
+            ->orderBy('clock_in', 'asc')
+            ->get()
+            ->groupBy(function ($record) {
+                return Carbon::parse($record->clock_in)->format('Y-m-d');
+            });
 
-        /**該当月の日数を取得 */
-        $daysInMonth = $date->daysInMonth;
-        /**日ごとのデータを整形*/
-        $dailyRecords = [];
-        /** 曜日の日本語設定 */
-        Carbon::setLocale('ja');
-        /**合計時間の初期化 */
-        $totalMinutes = 0;
+    $dailySummaries = [];
 
+    foreach ($attendances as $groupedDate => $records) {
+        $dailySummaries[$groupedDate] = [];
 
+        foreach ($records as $record) {
+            // 休憩の合計時間（分）を計算
+            $totalBreakMinutes = $record->breaks->sum(function ($break) {
+                if ($break->break_start && $break->break_end) {
+                    return Carbon::parse($break->break_end)->diffInMinutes(Carbon::parse($break->break_start));
+            }
+                    return 0;
+            });
+                // 整形済み休憩時間
+                $breakTimeFormatted = sprintf('%02d:%02d', floor($totalBreakMinutes / 60), $totalBreakMinutes % 60);
 
-        /**ログイン中スタッフauth()->id()の
-         * 該当月に出勤clock_inしたレコードを取得
-         * */
-        $targetDays = Attendance::where('staff_id', auth()->id())
-            /**whereBetween('clock_in', [開始, 終了]) は、clock_in が
-            * その月の範囲に入るものだけに絞る条件*/
-            ->whereBetween('clock_in', [$startOfMonth, $endOfMonth])
-            ->get();
+                //勤務時間を取得するための計算
+                $workMinutes = 0;
+                $clockInFormatted = null;
+                $clockOutFormatted = null;
+                $workTimeFormatted = null;
 
+            if ($record->clock_in && $record->clock_out) {
+                $in = Carbon::parse($record->clock_in);
+                $out = Carbon::parse($record->clock_out);
+                $clockInFormatted = $in->format('H:i');
+                $clockOutFormatted = $out->format('H:i');
 
-        /**
-         * その月の1日から最終日まで順番にループ
-         * $day = 1：スタートは1日
-         * $day <= $daysInMonth：月末まで繰り返す（例えば30日なら30まで）
-         * $day++：1日ずつ進めていく
-         */
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            /**$currentDateに日付を複製day($day)$day=5などで日付*変更*/
-            $currentDate = $date->copy()->day($day);
-            /**日付・曜日以外空欄スタート(一覧初期化) */
-            $record = [
-            'date' => $currentDate->format('m/d'),
-            'weekday' => $currentDate->isoFormat('dd'),
-            'clock_in' => '',
-            'clock_out' => '',
-            'work_time' => '',
-            'break_time' => '',
-        ];
-
-        /**その日に出勤したレコードを
-         * $targetDaysの中から1件だけ探す
-         * $targetDaysはその月に出勤した全レコードのコレクション
-         * ->first(function (...) {...})最初の条件にあう1件を探す
-         */
-        $targetDay = $targetDays
-        /**外の$currentDateを中で使用できるようにしている */
-        ->first(function ($item) use ($currentDate) {
-
-            /**出勤記録の日時とcurrentDateが同日か判定 */
-            return Carbon::parse($item->clock_in)->isSameDay($currentDate);
-    });
-
-        if ($targetDay && $targetDay->clock_out) {
-            /**出勤時間を日付オブジェクトに変換して$inに格納*/
-            $in = Carbon::parse($targetDay->clock_in);
-            /**退勤時間を日付オブジェクトに変換して$inに格納*/
-            $out = Carbon::parse($targetDay->clock_out);
-
-            $record['clock_in'] = $in->format('H:i');
-            $record['clock_out'] = $out->format('H:i');
-            $workMinutes = $out->diffInMinutes($in);
-            $record['work_time'] = sprintf('%02d:%02d', floor($workMinutes / 60), $workMinutes % 60);
-
-            
-            /**退勤時間-出勤時間=勤怠時間を $totalMinutesに格納*/
-            $totalMinutes += $workMinutes;
+                $workMinutes = $out->diffInMinutes($in) - $totalBreakMinutes;
+                $workTimeFormatted = sprintf('%02d:%02d', floor($workMinutes / 60), $workMinutes % 60);
             }
 
-            $record['id'] = $targetDay?->id;
-            $dailyRecords[] = $record;
-            
 
-
-        $breakMinutes = 0;
-        if ($targetDay) {
-            foreach ($targetDay->breaks as $break) {
-                if ($break->start_time && $break->end_time) {
-                    $start = Carbon::parse($break->start_time);
-                    $end = Carbon::parse($break->end_time);
-                    $breakMinutes += $end->diffInMinutes($start);
-                    
-                }
-            }
+            $dailySummaries[$groupedDate][] = [
+                'staff_name'    => $record->staff->user_name,
+                'staff_id'      => $record->staff_id, // ← これを追加！
+                'clock_in'      => $clockInFormatted ?? '未出勤',
+                'clock_out'     => $clockOutFormatted ?? '未退勤',
+                'break_time'    => $breakTimeFormatted,
+                'work_time'     => $workTimeFormatted ?? '00:00',
+                'id'            => $record->id,
+            ];
         }
+}
+    return view('adminrequestlist', [
+        'date' => $date,
+        'dailyRecords' => $dailySummaries[$date->format('Y-m-d')] ?? [],
+    ]);
 
-        if ($breakMinutes > 0) {
-            $record['break_time'] = sprintf('%02d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
-        } else {
-            $record['break_time'] = '';
-        }
-            $dailyRecords[] = $record;
-} 
-    
-        /**データを渡して勤怠一覧に戻る。*/
-        return view('attendancelist', compact('dailyRecords','date'));
     }
 }

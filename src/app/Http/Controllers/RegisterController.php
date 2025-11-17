@@ -1,6 +1,6 @@
 <?php
 
-// PG01　会員登録画面(register)*******************************************************************************************************
+// PG01　会員登録画面(register)
 
 /**
  * ユーザー会員登録画面の表示
@@ -17,7 +17,8 @@ use App\Models\Staff;
 use App\Http\Requests\RegisterRequest;
 // Hash::make() でパスワードを暗号化で使用　※パスワード暗号化に使用
 use Illuminate\Support\Facades\Hash;
-
+use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * RegisterController は Laravel のベースコントローラー Controller を継承
@@ -57,8 +58,12 @@ class RegisterController extends Controller
          'password' => Hash::make($validated['password']), 
          'is_admin'  => rand(0, 1), // ランダムで 0 または 1 を設定
       ]);
-         // 登録後ルート名attendance(/attendance)に遷移
-         return redirect()->route('attendance'); 
+
+       //登録したユーザーをログイン状態にする
+      Auth::login($staff);
+
+       // 登録後ルート名attendance(/attendance)に遷移
+      return redirect()->route('attendance.create'); 
 }
    }
 

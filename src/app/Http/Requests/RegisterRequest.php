@@ -5,7 +5,10 @@ namespace App\Http\Requests;
 // laravelのFormRequestクラスを継承するために必要な宣言
 use Illuminate\Foundation\Http\FormRequest;
 // RegisterRequestクラスの定義FormRequestを継承してバリデーションルールや
+use App\Models\Staff;
 // メッセージを定義する
+use Illuminate\Validation\Rule;
+
 class RegisterRequest extends FormRequest
 {
     /**
@@ -33,7 +36,7 @@ class RegisterRequest extends FormRequest
             // username:入力必須、20文字以内
             'user_name' => ['required', 'max:20'],
             // email:入力必須、メール形式、unique-.メールアドレス重複不可
-            'email' => ['required', 'email','unique:staff,email'],
+            'email' => ['required', 'email', Rule::unique(Staff::class, 'email')],
             // 入力必須、8文字以上、「パスワード」との重複のみ可
             'password' => ['required', 'min:8', 'confirmed'],
         ];

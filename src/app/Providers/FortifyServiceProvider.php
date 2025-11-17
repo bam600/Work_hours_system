@@ -1,6 +1,9 @@
 <?php
 namespace App\Providers;
 
+use App\Models\Staff;
+use Illuminate\Support\Facades\Hash;
+
 // 新しいユーザーを登録するクラス
 use App\Actions\Fortify\CreateNewUser;
 // パスワードをリセットするクラス
@@ -54,6 +57,17 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class); //プロフィール更新
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class); // パスワード変更
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class); //パスワードリセット
+
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $staff = Staff::where('email', $request->email)->first();
+
+            if ($staff && Hash::check($request->password, $staff->password)) {
+                return $staff;
+            }
+
+            return null;
+        });
 
         /**
          * 連続ログインをして試す悪意のある攻撃から守る設定

@@ -11,7 +11,12 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AdminSessionController;
 use App\Http\Controllers\RequestListController;
 use App\Http\Controllers\AttendanceInfoController;
+use App\Http\Controllers\AdminAttendanceListController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StaffListController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\AdminAttendanceInfoController;
+
 
 // PG01 会員登録画面**************************************************************************************
     //! get:会員登録フォームを表示(showは表示という責務が明確)
@@ -21,7 +26,7 @@ use App\Http\Controllers\AdminController;
 
 
 //pG02 ログイン画面(一般ユーザー)**************************************************************************
-    // ログイン画面（GET /login）
+    // ログイン画面（GET /login）re
     Route::get('/login',  [AuthenticatedSessionController::class, 'create'])
         ->middleware('guest')->name('login');   // ← create に修正
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])
@@ -40,8 +45,8 @@ use App\Http\Controllers\AdminController;
 
 // PG05 申請詳細画面**************************************************************************************
     Route::get('/attendance/detail/{id}', [AttendanceInfoController::class, 'show'])->middleware(['auth'])->name('attendance.info');
+    Route::post('/attendance/detail/{id}', [AttendanceInfoController::class, 'submit'])->middleware(['auth'])->name('attendance.submit');
 
-    Route::post('/attendance/detail/{id}', [AttendanceInfoController::class, 'update'])->middleware(['auth'])->name('attendance.update');
 
 // PG06 申請一覧画面**************************************************************************************
     Route::get('/stamp_correction_request/list', [RequestListController::class, 'create'])->middleware(['auth'])->name('request.list');
@@ -52,6 +57,13 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])->name('admin.store');
 });
 //pG08 勤怠一覧画面(管理者)*************************************************************************
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/attendance/list', [AdminController::class,'attendancelist'])->name('attendance.list');
-});
+    Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'adminrequestlist'])->middleware('auth')->name('adminrequest.list');
+
+//pG09 勤怠詳細覧画面(管理者)*************************************************************************
+    Route::get('admin/attendance/{id}', [AdminAttendanceInfoController::class,'show'])->middleware('auth')->name('adminattendance.info');
+
+// PG10 スタッフ一覧画面(管理者)**************************************************************************************
+    Route::get('/admin/staff/list', [StaffListController::class, 'show'])->middleware(['auth'])->name('stafflist');
+
+// PG12 スタッフ別勤怠一覧画面(管理者)**************************************************************************************
+    Route::get('/admin/attendance/staff/{id}/{month?}', [StaffController::class, 'show'])->middleware(['auth'])->name('staff.attendance');

@@ -26,7 +26,6 @@ class AuthenticatedSessionController extends Controller
     return view('auth.adminlogin'); // ← 管理者用ログイン画面
     }
 
-
     /**
      * ユーザがログアウト処理を
      * 行ったときに呼ばれるメソッド
@@ -37,13 +36,21 @@ class AuthenticatedSessionController extends Controller
          * ユーザーをログアウトさせる
          * 'webは通常のユーザー認証を指す
          */
-        Auth::guard('web')->logout();  //ログアウト　Auth::check（）はfalse,Auth::user()はnullになる
+         // ログアウト前にユーザー情報を取得！
+        $user = Auth::user();
 
-        $request->session()->invalidate();  //セッション無効化　現在のセッション破棄
-        $request->session()->regenerateToken(); // CSRFトークン再生成
+        Auth::guard('web')->logout();
 
-        return redirect('/login'); // ← ログアウト後にログイン画面へ
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+ // is_admin の値で分岐！
+    if ($user && (int)$user->is_admin === 1) {
+        return redirect()->route('adminlogin'); // 管理者ログイン画面へへ
     }
+
+    return redirect()->route('login'); // 一般ログイン画面へ
+}
 
     
 public function store(Request $request)
@@ -79,10 +86,11 @@ public function store(Request $request)
             'auth' => '管理者のみログイン可能です',
         ])->withInput();
     }
-    return redirect('/attendance/list');
+    return redirect()->route('adminrequest.list');
 }
 
     // 一般ユーザー用の遷移
     return redirect('/attendance');
 }
+
 }
