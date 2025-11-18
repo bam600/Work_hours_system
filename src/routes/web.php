@@ -61,9 +61,14 @@ Route::middleware(['guest'])->group(function () {
 
 //pG09 勤怠詳細覧画面(管理者)*************************************************************************
     Route::get('admin/attendance/{id}', [AdminAttendanceInfoController::class,'show'])->middleware('auth')->name('adminattendance.info');
+    Route::post('admin/attendance/{id}', [AdminAttendanceInfoController::class,'submit'])->middleware('auth')->name('adminattendance.show');
+    
 
 // PG10 スタッフ一覧画面(管理者)**************************************************************************************
     Route::get('/admin/staff/list', [StaffListController::class, 'show'])->middleware(['auth'])->name('stafflist');
 
 // PG12 スタッフ別勤怠一覧画面(管理者)**************************************************************************************
     Route::get('/admin/attendance/staff/{id}/{month?}', [StaffController::class, 'show'])->middleware(['auth'])->name('staff.attendance');
+
+//pG13 修正承認詳細(管理者)*************************************************************************
+    Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminApproveController::class,'approve'])->middleware('auth')->name('adminattendance.approve');

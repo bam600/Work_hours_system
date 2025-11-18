@@ -71,7 +71,7 @@
             <th class="listleft4">{{ $record['break_time'] }}</th>
             <th class="listleft4">{{ $record['actual_work_time'] }}</th>
         @if (!empty($record['id']))
-            <th><a href="{{ route('attendance.info', ['id' => $record['id']]) }}">詳細</a></th>
+            <th><a class="infobtm" href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a></th>
         @else
             <th>詳細</th>
         @endif

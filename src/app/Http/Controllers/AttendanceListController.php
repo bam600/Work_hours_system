@@ -10,7 +10,10 @@ use Carbon\Carbon;
 class AttendanceListController extends Controller
 {
     public function create(Request $request)
-    {
+    {   
+
+        $staffId = $request->input('staff_id', auth()->id());
+
         /**当月を取得 */
         $month = $request->input('month', Carbon::today()->format('Y-m'));
         $date = Carbon::createFromFormat('Y-m', $month)->startOfMonth();;
@@ -27,8 +30,6 @@ class AttendanceListController extends Controller
         Carbon::setLocale('ja');
         /**合計時間の初期化 */
         $totalMinutes = 0;
-
-\Log::debug('対象月: ' . $month);
 
         /**ログイン中スタッフauth()->id()の
          * 該当月に出勤clock_inしたレコードを取得
@@ -55,6 +56,7 @@ class AttendanceListController extends Controller
             'clock_out' => '',
             'work_time' => '',
             'break_time' => '',
+            'staff_id' => $targetDay?->staff_id ?? $staffId, // ← ここを追加！
         ];
 
         /**その日に出勤したレコードを
@@ -101,24 +103,15 @@ class AttendanceListController extends Controller
 
         if ($breakMinutes > 0) {
             $record['break_time'] = sprintf('%02d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
-        } elseif ($targetDay && $targetDay->clock_out && count($targetDay->breaks) === 0) {
-            // 出勤・退勤はあるけど休憩レコードがない場合
-            $record['break_time'] = '0:00';
-        } elseif ($targetDay && count($targetDay->breaks) > 0) {
-            // 休憩レコードはあるけど時間が未入力
-            $record['break_time'] = '0:00';
         } else {
-            // 出勤してない or レコードなし
-            $record['break_time'] = null;
+            $record['break_time'] = sprintf('%d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
         }
-
-        $record['id'] = $targetDay?->id;
-        $dailyRecords[] = $record;
-
-    }
+            $record['id'] = $targetDay?->id;
+            $dailyRecords[] = $record;
+} 
+    
         /**データを渡して勤怠一覧に戻る。*/
         return view('attendancelist', compact('dailyRecords','date'));
-
+    }
 }
     
-}

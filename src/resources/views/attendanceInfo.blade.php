@@ -54,7 +54,7 @@
     </tr>
     <tr>
         <th class="list2">出勤・退勤</th>
-        <td class = "clockinout">
+        <td class = "clockinout" colspan="4">
             @if($editable)
                 <input type="text" name="clockin" value="{{ old('clockin', ($attendance->clock_in)->format('H:i')) }}">
                 ～ 

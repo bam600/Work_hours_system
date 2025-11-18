@@ -29,6 +29,8 @@ class StaffController extends Controller
         /**合計時間の初期化 */
         $totalMinutes = 0;
 
+        $staffId = $id; // ← これを追加！
+
 
         /**ログイン中スタッフauth()->id()の
          * 該当月に出勤clock_inしたレコードを取得　スタッフ名も取得
@@ -57,6 +59,7 @@ class StaffController extends Controller
             'clock_out' => '',
             'work_time' => '',
             'break_time' => '',
+            'staff_id' => $targetDay?->staff_id ?? $staffId, // ← ここを追加！
         ];
 
         $workMinutes = 0; // ← ここを追加

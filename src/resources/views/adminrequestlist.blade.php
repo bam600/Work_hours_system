@@ -16,7 +16,7 @@
 @section('header')
     @if (Auth::check())
             <div class="header__links">
-                <a class="link" href="{{route('list.create') }}">勤怠一覧</a>
+                <a class="link" href="{{route('adminrequest.list') }}">勤怠一覧</a>
                 <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
                 <a class="link" href="{{ route('request.list') }}">申請一覧</a>
                 <form method="POST" action="{{ route('logout') }}">
@@ -78,10 +78,11 @@
             <th class="listleft4">{{ $record['work_time'] }}</th>
     @if (!empty($record['staff_id']))
     <th>
-        <a href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a>
+        <a class="infobtm" href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a>
+        
     </th>
     @else
-        <th>詳細</th>
+        <th class="infobtm">詳細</th>
     @endif
         </tr>
     @endforeach

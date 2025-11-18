@@ -1,3 +1,4 @@
+{{-- PG06,PG12 申請一覧画面 --}}
 @extends('layouts.app')  
 
 @section('title', '申請一覧画面') 
@@ -8,14 +9,24 @@
 @endsection
 
 @section('header')
-    @if (Auth::check())
+    @if(Auth::user()->is_admin == 1)
+        <div class="header__links">
+            <a class="link" href="{{ route('adminrequest.list') }}">勤怠一覧</a>
+            <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
+            <a class="link" href="{{ route('request.list') }}">申請一覧</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+            <button type="submit" class="btm">ログアウト</button>
+            </form>
+        </div>
+    @elseif(Auth::user()->is_admin == 0)
         <div class="header__links">
             <a class="link" href="{{ route('attendance.create') }}">勤怠</a>
             <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
             <a class="link" href="{{ route('request.list') }}">申請</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="btm">ログアウト</button>
+            <button type="submit" class="btm">ログアウト</button>
             </form>
         </div>
     @endif
@@ -60,6 +71,46 @@
         </tr>
     </thead>
 <tbody>
+@if(Auth::user()->is_admin == 1)
+    {{-- 管理者向け：スタッフごとにグループ表示 --}}
+    @if($tab === 'pending')
+        @forelse($pendingRequests as $staffId => $requests)
+            @foreach($requests as $request)
+                <tr>
+                    <td class="listleft4">承認待ち</td>
+                    <td class="listleft4">{{ $request->staff->user_name }}</td>
+                    <td class="listleft4">{{ $request->clock_in->format('Y/m/d') }}</td>
+                    <td class="listleft4">{{ $request->note }}</td>
+                    <td class="listleft4">{{ $request->created_at->format('Y/m/d') }}</td>
+                    <td class="listleft4">
+                        <a href="{{ route('adminattendance.info', ['id' => $request->id]) }}" class="infobtm">詳細</a>
+                    </td>
+                </tr>
+            @endforeach
+        @empty
+            <tr><td colspan="6">承認待ちの申請はありません。</td></tr>
+        @endforelse
+    @elseif($tab === 'approved')
+        @forelse($approvedRequests as $staffId => $requests)
+            <tr><td colspan="6" class="staff-header">{{ $requests->first()->staff->user_name }}</td></tr>
+            @foreach($requests as $request)
+                <tr>
+                    <td class="listleft4">承認済み</td>
+                    <td class="listleft4">{{ $request->staff->user_name }}</td>
+                    <td class="listleft4">{{ $request->clock_in->format('Y/m/d') }}</td>
+                    <td class="listleft4">{{ $request->note }}</td>
+                    <td class="listleft4">{{ $request->created_at->format('Y/m/d') }}</td>
+                    <td class="listleft4">
+                        <a href="{{ route('attendance.info', ['id' => $request->id]) }}" class="infobtm">詳細</a>
+                    </td>
+                </tr>
+            @endforeach
+        @empty
+            <tr><td colspan="6">承認済みの申請はありません。</td></tr>
+        @endforelse
+    @endif
+@else
+    {{-- 一般ユーザー向け：そのままでOK --}}
     @if($tab === 'pending')
         @forelse($pendingRequests as $request)
             <tr>
@@ -91,6 +142,7 @@
             <tr><td colspan="6">承認済みの申請はありません。</td></tr>
         @endforelse
     @endif
+@endif
 </tbody>
 </table>
 @endsection

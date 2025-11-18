@@ -15,15 +15,15 @@
 
 @section('header')
     @if (Auth::check())
-            <div class="header__links">
-                <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
-                <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
-                <a class="link" href="{{ route('login') }}">申請一覧</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btm">ログアウト</button>
-                </form>
-            </div>
+        <div class="header__links">
+            <a class="link" href="{{ route('adminrequest.list') }}">勤怠一覧</a>
+            <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
+            <a class="link" href="{{ route('request.list') }}">申請一覧</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+            <button type="submit" class="btm">ログアウト</button>
+            </form>
+        </div>
     @endif
 @endsection
 
@@ -47,9 +47,9 @@
             <th class="listleft4">{{ $list['user_name'] }}</th>
             <th class="listleft4">{{ $list['email'] }}</th>
         @if (!empty($list['id']))
-            <th><a href="{{ route('staff.attendance', ['id' => $list['id']]) }}">詳細</a></th>
+            <th><a  class="infobtm"  href="{{ route('staff.attendance', ['id' => $list['id']]) }}">詳細</a></th>
         @else
-            <th>詳細</th>
+            <th class="infobtm">詳細</th>
         @endif
         </tr>
     @endforeach
