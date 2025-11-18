@@ -49,7 +49,7 @@ docker-compose.ymlファイルを編集してください。
 - Git（バージョン管理）
 
 ## _ER 図_
-![勤怠管理アプリDB構成図](./docs/ER.png)
+![ER図](./docker/docs/er.png)
 
 ## _URL_
 ### 開発環境（ローカル）  
