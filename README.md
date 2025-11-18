@@ -25,7 +25,7 @@ docker-compose.ymlファイルを編集してください。
     4.php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
     5.App\Providers\FortifyServiceProvider.phpに
         Fortify::loginView(fn () => view('auth.login'));
-        Fortify::registerView(fn () => view('auth.register'));をついか
+        Fortify::registerView(fn () => view('auth.register'));を追加
     ＊必要に応じてルーティングやビューを調整
 
 ## _Livewireの導入_
@@ -49,13 +49,14 @@ docker-compose.ymlファイルを編集してください。
 - Git（バージョン管理）
 
 ## _ER 図_
-![FrimaApp構成図](./frimaapp.png)
+![勤怠管理アプリDB構成図](./docs/ER.png)
 
 ## _URL_
 ### 開発環境（ローカル）  
   `http://localhost:8000`  
-  ＊docker-compose 実行後、Nginx/PHPコンテナが起動している状態でアクセス可能です。
+  ＊docker-compose 実行後、Nginx/PHPコンテナが起動している状態でアクセス可能
 
 ### 認証画面（Fortify）  
-  - ログイン：`http://localhost:8000/login`  
-  - 登録：`http://localhost:8000/register`
+  - ログイン：`http://localhost/login`  
+  - 登録：`http://localhost/register`
+  - 管理者ユーザ用ログイン：`http://localhost/admin/login`  
