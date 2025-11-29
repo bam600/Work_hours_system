@@ -193,6 +193,31 @@ table.listtable th {
     font-weight: bold;
 }
 
+.btn--primary {
+    width: 20%;
+    height:30%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 18px;
+    /* ← 12px × 1.5 */
+    border-radius: 4px;
+    /* ← 6px × 1.5 */
+    cursor: pointer;
+    font-size: 24px;
+    /* ← 16px × 1.5 */
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: background 0.2s ease;
+}
+
+.btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top:20px;
+    /* 右寄せ */
+}
+
 
 /* =========================
 PC対応（1400〜1540px）

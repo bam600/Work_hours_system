@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail; 
 use Illuminate\Notifications\Notifiable;
 use App\Models\AttendRequest;
 use App\Models\Attendance;
@@ -12,7 +13,7 @@ use App\Models\Attendance;
 /**
  * このモデル（たとえば User）が 1つの staff を持つ という関係を定義します。*「親 → 子」の方向で、親モデルから子モデルを取得するためのリレーションです。
  */
-class Staff extends Authenticatable
+class Staff extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
     use HasFactory;
@@ -20,7 +21,7 @@ class Staff extends Authenticatable
     // $fillableで安全に代入可能なカラムを明示。無い場合create()は使えない
     protected $table = 'staffs';
 
-    protected $fillable = ['user_name','email','password','is_admin'];
+    protected $fillable = ['user_name','email','email_verified_at','password','is_admin'];
 
     // 勤怠記録とのリレーション（1対多）
     public function attendances()

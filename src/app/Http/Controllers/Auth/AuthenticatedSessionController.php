@@ -72,11 +72,13 @@ public function store(Request $request)
         ])->withInput();
     }
 
-    $user = Auth::user();
     $request->session()->regenerate();
+    $user = Auth::user();
 
     \Log::debug('ログインユーザー:', ['id' => $user->id, 'is_admin' => $user->is_admin]);
     \Log::debug('アクセスパス:', ['path' => $request->path()]);
+
+    
 
     // アクセス元URLで分岐！
     if (str_starts_with($request->path(), 'admin')) {

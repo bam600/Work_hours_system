@@ -1,10 +1,10 @@
-{{-- PG09 勤怠詳細画面(管理者) --}}
+{{-- PG13 修正承認画面(管理者) --}}
 
 {{--共通レイアウトの継承--}}
 @extends('layouts.app')  
 
 {{--タグタイトル--}}
-@section('title', '勤怠詳細(管理者)') 
+@section('title', '修正承認(管理者)') 
 
 {{--専用CSSを読み込む---}}
 @section('head')    
@@ -33,7 +33,7 @@
     <h2 class="label">❙ 勤怠詳細</h2>
 </div>
 
-<form action="{{ route('attendance.submit', ['id' => $attendance->id]) }}" method="POST">
+<form action="{{ route('adminattendance.approve', ['attendance_correct_request_id' => $attendance->attendRequest->id]) }}" method="POST">
     @csrf
     @php
         $editable = true;
@@ -54,21 +54,9 @@
     <tr>
         <th class="list2">出勤・退勤</th>
         <td class = "clockinout">
-            @if($editable)
-                <input type="text" name="clockin" value="{{ old('clockin', ($attendance->clock_in)->format('H:i')) }}">
+            <span>{{ ($attendance->clock_in)->format('H:i') }}
                 ～ 
-                <input type="text" name="clockout" value="{{ old('clockout', ($attendance->clock_out)->format('H:i')) }}">
-            @else
-                    <span>{{ ($attendance->clock_in)->format('H:i') }}
-                    ～ 
-                    {{ ($attendance->clock_out)->format('H:i') }}</span>
-            @endif
-            @error('clockin')
-                <span class="error">{{ $message }}</span>
-            @enderror
-            @error('clockout')
-                <span class="error">{{ $message }}</span>
-            @enderror
+                {{ ($attendance->clock_out)->format('H:i') }}</span>
         </td>
     </tr>
 
@@ -77,21 +65,7 @@
 <tr>
     <th class="list2">休憩{{ $loop->iteration }}</th>
     <td class="clockinout" colspan="4">
-        @if ($editable)
-            <input type="text" name="break_start[]" value="{{ old("break_start.$index", \Carbon\Carbon::parse($break->start_time)->format('H:i')) }}">
-            ～
-            <input type="text" name="break_end[]" value="{{ old("break_end.$index", \Carbon\Carbon::parse($break->end_time)->format('H:i')) }}">
-
-            @if ($errors->has("break_start.$index"))
-                <div class="error">{{ $errors->first("break_start.$index") }}</div>
-            @endif
-
-            @if ($errors->has("break_end.$index"))
-                <div class="error">{{ $errors->first("break_end.$index") }}</div>
-            @endif
-        @else
             <span>{{ \Carbon\Carbon::parse($break->start_time)->format('H:i') }} ～ {{ \Carbon\Carbon::parse($break->end_time)->format('H:i') }}</span>
-        @endif
     </td>
 </tr>
 @endforeach
@@ -99,15 +73,18 @@
 <tr>
     <th class="list3">備考</th>
     <td class="attendancelist">
-        @if ($editable)
-            <input type="text" name="note" value="{{ old('note', $attendance->note ?? '') }}">
-        @else
             {{ $attendance->note ?? '（なし）' }}
-        @endif
     </td>
 </tr>
 </table>
-    <div" class="button-cell">
-            <button type="submit" class="btn--primary">修正</button>
-        </form>
+    @if($attendance->attendRequest && $attendance->attendRequest->status === 'approved')
+        <div class="button-cell">
+            <button type="submit" class="btn--noclick">承認済み</span>
+        </div>
+    @else
+        <div class="button-cell">
+            <button type="submit" class="btn--primary">承認</button>
+        </div>
+    @endif
+</form>
 @endsection

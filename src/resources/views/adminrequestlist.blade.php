@@ -70,22 +70,18 @@
     <!-- 検索結果↓ -->
     @if(isset($dailyRecords) && count($dailyRecords) > 0)
     @foreach($dailyRecords as $record)
-        <tr class="find">
-            <th class="listleft4">{{ $record['staff_name']}}</th>
-            <th class="listleft4">{{ $record['clock_in']}}</th>
-            <th class="listleft4">{{ $record['clock_out'] }}</th>
-            <th class="listleft4">{{ $record['break_time'] }}</th>
-            <th class="listleft4">{{ $record['work_time'] }}</th>
-    @if (!empty($record['staff_id']))
-    <th>
-        <a class="infobtm" href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a>
-        
-    </th>
-    @else
-        <th class="infobtm">詳細</th>
-    @endif
-        </tr>
-    @endforeach
+    <tr class="find">
+        <th class="listleft4">{{ $record['staff_name'] }}</th>
+        <th class="listleft4">{{ $record['clock_in'] }}</th>
+        <th class="listleft4">{{ $record['clock_out'] }}</th>
+        <th class="listleft4">{{ $record['break_time'] }}</th>
+        <th class="listleft4">{{ $record['work_time'] }}</th>
+        <th class="listleft4">
+                <a class="infobtm" href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a>
+        </th>
+    </tr>
+@endforeach
+
     @endif
 </table>
 @endsection

@@ -1,4 +1,4 @@
-{{-- PG02 ログイン画面(社員) --}}
+{{-- PG07 ログイン画面(管理者) --}}
 
 {{--共通レイアウトの継承--}}
 @extends('layouts.app')  
@@ -27,7 +27,10 @@
     <div class="form-group">
         <label for="email">メールアドレス</label>
         <input type="text" id="email" name="email" value="{{ old('email') }}"/>
-    @error('email') <span class="error">{{ $message }}</span> @enderror
+    {{-- 入力欄の直後にエラーメッセージを置く --}}
+    @error('email')
+        <span class="error">{{ $message }}</span>
+    @enderror
     </div>
 
     <div class="form-group">
@@ -36,7 +39,7 @@
     @error('password') <span class="error">{{ $message }}</span> @enderror
 </div>
     
-    <button type="submit" class="btn btn--primary">ログインする</button>
+    <button type="submit" class="btn btn--primary">管理者ログインする</button>
 </form>
 
         <div class="center-link">

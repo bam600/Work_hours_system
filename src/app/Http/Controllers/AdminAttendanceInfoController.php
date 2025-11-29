@@ -38,7 +38,7 @@ class AdminAttendanceInfoController  extends Controller
     $latestRequest = $attendance->attendRequest;
     $editable = !($latestRequest && in_array($latestRequest->status, ['pending', 'approved']));
 
-    return view('adminInfo', compact('attendance', 'editable', 'id'));
+    return view('approve', compact('attendance', 'editable', 'id'));
     }
 
     public function submit(AttendanceInfoRequest $request, $id)

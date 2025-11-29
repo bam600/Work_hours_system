@@ -7,6 +7,7 @@ use App\Models\BreakModel;
 use App\Models\Staff;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StaffController extends Controller
 {
@@ -125,5 +126,68 @@ class StaffController extends Controller
         return view('staff', compact('dailyRecords','date','id','firstRecord','staff'));
 
     }
+
+    // CSV出力
+public function exportCsv(Request $request, $id)
+{
+    $month = $request->input('month', now()->format('Y-m'));
+    $start = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+    $end   = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+    $attendances = Attendance::where('staff_id', $id)
+        ->whereBetween('clock_in', [$start, $end])
+        ->with('breaks')
+        ->get();
+
+    $response = new StreamedResponse(function() use ($attendances) {
+        if (ob_get_level() > 0) {
+            ob_end_clean(); // 出力バッファをクリア
+        }
+
+        $handle = fopen('php://output', 'w');
+        stream_filter_prepend($handle, 'convert.iconv.UTF-8/SJIS-win');
+
+        // ヘッダー行
+        fputcsv($handle, ['日付', '出勤', '退勤', '休憩', '合計']);
+
+        foreach ($attendances as $attendance) {
+            // 勤務時間計算
+            $in = $attendance->clock_in ? Carbon::parse($attendance->clock_in) : null;
+            $out = $attendance->clock_out ? Carbon::parse($attendance->clock_out) : null;
+            $workMinutes = ($in && $out) ? $out->diffInMinutes($in) : 0;
+
+            // 休憩時間計算
+            $breakMinutes = 0;
+            foreach ($attendance->breaks as $break) {
+                if ($break->start_time && $break->end_time) {
+                    $start = Carbon::parse($break->start_time);
+                    $end = Carbon::parse($break->end_time);
+                    $breakMinutes += $end->diffInMinutes($start);
+                }
+            }
+
+            $actualMinutes = max(0, $workMinutes - $breakMinutes);
+
+            $breakTime = sprintf('%02d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
+            $actualWorkTime = sprintf('%02d:%02d', floor($actualMinutes / 60), $actualMinutes % 60);
+
+            fputcsv($handle, [
+                $in?->format('Y-m-d') ?? '',
+                $in?->format('H:i') ?? '',
+                $out?->format('H:i') ?? '',
+                $breakTime,
+                $actualWorkTime,
+            ]);
+        }
+
+        fclose($handle);
+    });
+
+    $filename = 'staff_'.$id.'_attendance_'.$month.'.csv';
+    $response->headers->set('Content-Type', 'text/csv; charset=Shift_JIS');
+    $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+
+    return $response;
+}
 }
     

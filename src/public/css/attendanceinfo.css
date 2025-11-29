@@ -181,6 +181,24 @@ tr {
 
 }
 
+/* 承認済み */
+.btn--noclick {
+    pointer-events: none;
+    width: 15%;
+    background: #696969;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-top: 40px;
+    float: right;
+}
+
+
 table.listtable {
     border-collapse: separate;
     /* ← これが必要！ */

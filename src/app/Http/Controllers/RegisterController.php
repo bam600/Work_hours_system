@@ -11,6 +11,8 @@
 //クラスの(名前空間)を定義する宣言
 namespace App\Http\Controllers;  
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
 //Staff::create() で使用　※DB保存
 use App\Models\Staff;
 // store(RegisterRequest $request)使用　※バリデーション
@@ -19,6 +21,8 @@ use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use Carbon\Carbon;
 
 /**
  * RegisterController は Laravel のベースコントローラー Controller を継承
@@ -47,9 +51,6 @@ class RegisterController extends Controller
       /* $request->validated() によって、チェックに通ったデータだけが $validated に入る*/
       $validated = $request->validated();
 
-      // Fakerはダミーデータ自動生成ライブラリLaravel標準で利用可）。
-      $faker = Faker::create();
-
       // Staff モデルを使って、staffs テーブルに新しいデータを保存
       $staff = Staff::create([
          'user_name' => $validated['user_name'],
@@ -59,11 +60,18 @@ class RegisterController extends Controller
          'is_admin'  => rand(0, 1), // ランダムで 0 または 1 を設定
       ]);
 
+      // 送信時間をDBに保存（認証完了ではなく送信時間）
+      $staff->email_sent_at = Carbon::now();
+      $staff->save();
+
+      // メール認証
+      event(new Registered($staff));
+
        //登録したユーザーをログイン状態にする
       Auth::login($staff);
 
        // 登録後ルート名attendance(/attendance)に遷移
-      return redirect()->route('attendance.create'); 
+      return redirect()->route('verification.notice'); 
 }
    }
 

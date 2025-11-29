@@ -78,4 +78,11 @@
         </tr>
     @endforeach
 </table>
+    <!-- CSV出力フォーム -->
+    <form action="{{ route('staff.attendance.export', ['id' => $id]) }}" method="GET">
+        <div class="btn-wrapper">
+            <input type="hidden" name="month" value="{{ $date->format('Y-m') }}">
+            <button type="submit" class="btn--primary">CSV出力</button>
+        </div>
+    </form>
 @endsection

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('user_name', 255);
             // メールアドレス
             $table->string('email', 255)->unique();
+            $table->timestamp('email_sent_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable()->after('email'); 
             // パスワード
             $table->string('password', 255)->unique();;
             // 管理者権限判断　0:社員　1:管理者

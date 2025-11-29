@@ -83,7 +83,7 @@
                     <td class="listleft4">{{ $request->note }}</td>
                     <td class="listleft4">{{ $request->created_at->format('Y/m/d') }}</td>
                     <td class="listleft4">
-                        <a href="{{ route('adminattendance.info', ['id' => $request->id]) }}" class="infobtm">詳細</a>
+                        <a href="{{ route('adminattendance.show', ['attendance_correct_request_id' => $request->id]) }}" class="infobtm">詳細</a>
                     </td>
                 </tr>
             @endforeach
@@ -92,7 +92,6 @@
         @endforelse
     @elseif($tab === 'approved')
         @forelse($approvedRequests as $staffId => $requests)
-            <tr><td colspan="6" class="staff-header">{{ $requests->first()->staff->user_name }}</td></tr>
             @foreach($requests as $request)
                 <tr>
                     <td class="listleft4">承認済み</td>
@@ -101,7 +100,7 @@
                     <td class="listleft4">{{ $request->note }}</td>
                     <td class="listleft4">{{ $request->created_at->format('Y/m/d') }}</td>
                     <td class="listleft4">
-                        <a href="{{ route('attendance.info', ['id' => $request->id]) }}" class="infobtm">詳細</a>
+                        <a href="{{ route('adminattendance.show', ['attendance_correct_request_id' => $request->id]) }}" class="infobtm">詳細</a>
                     </td>
                 </tr>
             @endforeach
@@ -127,20 +126,22 @@
             <tr><td colspan="6">承認待ちの申請はありません。</td></tr>
         @endforelse
     @elseif($tab === 'approved')
-        @forelse($approvedRequests as $request)
-            <tr>
-                <td class="listleft4">承認済み</td>
-                <td class="listleft4">{{ $request->staff->user_name }}</td>
-                <td class="listleft4">{{ $request->clock_in->format('Y/m/d') }}</td>
-                <td class="listleft4">{{ $request->note }}</td>
-                <td class="listleft4">{{ $request->created_at->format('Y/m/d') }}</td>
-                <td class="listleft4">
-                    <a href="{{ route('attendance.info', ['id' => $request->id]) }}">詳細</a>
-                </td>
-            </tr>
-        @empty
-            <tr><td colspan="6">承認済みの申請はありません。</td></tr>
-        @endforelse
+    @forelse($approvedRequests as $staffId => $requests)
+    @foreach($requests as $request)
+        <tr>
+            <td class="listleft4">承認済み</td>
+            <td class="listleft4">{{ $request->staff->user_name }}</td>
+            <td class="listleft4">{{ $request->clock_in->format('Y/m/d') }}</td>
+            <td class="listleft4">{{ $request->note }}</td>
+            <td class="listleft4">{{ $request->created_at->format('Y/m/d') }}</td>
+            <td class="listleft4">
+                <a href="{{ route('adminattendance.show', ['attendance_correct_request_id' => $request->id]) }}" class="infobtm">詳細</a>
+            </td>
+        </tr>
+    @endforeach
+@empty
+    <tr><td colspan="6">承認済みの申請はありません。</td></tr>
+@endforelse
     @endif
 @endif
 </tbody>
