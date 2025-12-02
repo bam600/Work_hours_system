@@ -1,18 +1,18 @@
 # _勤怠管理アプリケーションシステム_
 
 ## _概要_
-    企業向け勤怠管理・スタッフ管理を目的にしたWebアプリ
+  - 企業向け勤怠管理・スタッフ管理を目的にしたWebアプリ
 
 ## _対象ユーザー_
-  一般スタッフ：出勤・退勤・休憩記録 / 月別勤務照会 / プロフィール編集
-  管理者：社員管理 / 勤怠管理 / 統計確認
+  - 一般スタッフ：出勤・退勤・休憩記録 / 月別勤務照会 / プロフィール編集
+  - 管理者：社員管理 / 勤怠管理 / 統計確認
 
 ## _機能一覧_
-  ログイン・認証: Fortifyによるログイン / 会員登録 / メール認証 /
-  勤怠管理: 出勤・退勤ボタン / 休憩開始・終了 / 当日ステータス表示
-  従業員管理:スタッフ一覧 / 詳細 / 編集 / 削除（管理者のみ）
-  セキュリティ: CSRF / 認可（Gate） / 管理者判定機能 / throttling
-  UI: レスポンシブデザイン（PC / タブレット / スマートフォン対応）
+  - ログイン・認証: Fortifyによるログイン / 会員登録 / メール認証 /
+  - 勤怠管理: 出勤・退勤ボタン / 休憩開始・終了 / 当日ステータス表示
+  - 従業員管理:スタッフ一覧 / 詳細 / 編集 / 削除（管理者のみ）
+  - セキュリティ: CSRF / 認可（Gate） / 管理者判定機能 / throttling
+  - UI: レスポンシブデザイン（PC / タブレット / スマートフォン対応）
 
 ## _使用技術(実行環境)_
 ### バックエンド
@@ -22,9 +22,9 @@
 ### データベース
     MySQL 8 / Migration / Seeder / Factory
 ### ミドルウェア
-　　Nginx / Docker Compose
+    Nginx / Docker Compose
 ### 外部サービス
-　　Mailtrap（メール送信の検証）
+    Mailtrap（メール送信の検証）
 ### 開発ツール
     VSCode / Git / Laravel Artisan CLI / phpMyAdmin
 
@@ -36,7 +36,7 @@
         docker-compose up -d --build
 ＊MySQLは、OSによって起動しない場合があるので、各PCにあわせて
 docker-compose.ymlファイルを編集してください。
-    3.Laravel セットアップ
+    3.  Laravelセットアップ
         docker-compose exec php bash
         composer install
         cp .env.example .env
@@ -45,32 +45,32 @@ docker-compose.ymlファイルを編集してください。
         php artisan db:seed
     
 ## _認証設定（Fortify）_
-    1.docoker-compose exec php bash
-    2.composer require laravel/fortify
-    3.config/app.phpにApp\Providers\FortifyServiceProvider::class,を追加
-    4.php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
-    5.App\Providers\FortifyServiceProvider.phpに
+    1.  docoker-compose exec php bash
+    2.  composer require laravel/fortify
+    3.  config/app.phpにApp\Providers\FortifyServiceProvider::class,を追加
+    4.  php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
+    5.  App\Providers\FortifyServiceProvider.phpに
         Fortify::loginView(fn () => view('auth.login'));
         Fortify::registerView(fn () => view('auth.register'));を追加
-    ＊必要に応じてルーティングやビューを調整
+        ＊必要に応じてルーティングやビューを調整
 
 ## _メール送信（Mailtrap）_
-  本アプリでは、新規登録時の確認メール送信・パスワードリセットメール送信を行うために Mailtrap を使用
+    本アプリでは、新規登録時の確認メール送信・パスワードリセットメール送信を行うために Mailtrap を使用
 ### Mailtrap アカウント作成
-  1.https://mailtrap.ioにアクセス
-  2.Sign up → 無料アカウント作成
-  3.Dashboard から Email Testing → Inboxes を開く
-  4.既存の Inbox を選択、または「Add Inbox」で新規作成
+    1.  https://mailtrap.ioにアクセス
+    2.  Sign up → 無料アカウント作成
+    3.  Dashboard から Email Testing → Inboxes を開く
+    4.  既存の Inbox を選択、または「Add Inbox」で新規作成
 ### MAIL_USERNAME / MAIL_PASSWORD の取得方法
-  1.Mailtrap ダッシュボードの Inbox 画面を開く
-  2.上部メニューから Integration を選択
-  3.「Integrate with」から Laravel 9+ / 10 を選択
-  4.画面中央に .env 形式の SMTP 設定コード が表示されます
-    その中にある ⬇
-    MAIL_USERNAME=xxxxxxxxxxxx
-    MAIL_PASSWORD=xxxxxxxxxxxx
-    この2つが Mailtrapが発行したメール認証情報です。
-    (コピーのボタンでコピーしないと情報が得られません)
+    1.  Mailtrap ダッシュボードの Inbox 画面を開く
+    2.  上部メニューから Integration を選択
+    3.  「Integrate with」から Laravel 9+ / 10 を選択
+    4.    画面中央に .env 形式の SMTP 設定コード が表示されます
+          その中にある ⬇
+          MAIL_USERNAME=xxxxxxxxxxxx
+          MAIL_PASSWORD=xxxxxxxxxxxx
+          この2つが Mailtrapが発行したメール認証情報です。
+          (コピーのボタンでコピーしないと情報が得られません)
 ### .envに以下を設定
     MAIL_MAILER=smtp
     MAIL_HOST=smtp.mailtrap.io
@@ -82,7 +82,7 @@ docker-compose.ymlファイルを編集してください。
     MAIL_FROM_NAME="${APP_NAME}"
 
 ## _Livewireの導入_
-    1.composer require livewire/livewire
+    composer require livewire/livewire
 
 ## _URL一覧_
     - トップページ：`http://localhost:8000` 
@@ -102,13 +102,3 @@ docker-compose.ymlファイルを編集してください。
 
 ## _ER 図_
 ![ER図](./docker/docs/attendance_er.png)
-
-## _URL_
-### 開発環境（ローカル）  
-  `http://localhost:8000`  
-  ＊docker-compose 実行後、Nginx/PHPコンテナが起動している状態でアクセス可能
-
-### 認証画面（Fortify）  
-  - ログイン：`http://localhost/login`  
-  - 登録：`http://localhost/register`
-  - 管理者ユーザ用ログイン：`http://localhost/admin/login`  
