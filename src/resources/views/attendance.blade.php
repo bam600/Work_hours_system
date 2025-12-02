@@ -41,7 +41,6 @@
 @endsection
 
 
-{{--以下会員登録フォーム--}}
 @section('content')  
 
 <div class="register-wrapper">

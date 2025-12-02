@@ -1,4 +1,4 @@
-<!-- 共通レイアウト -->
+{--共通レイアウト--}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,7 +7,7 @@
     <title>@yield('title', 'デフォルトタイトル')</title>
 
     <link rel="stylesheet" href="{{ asset('css/header_title.css') }}" />
-
+{{--session_register_shutdown--}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">

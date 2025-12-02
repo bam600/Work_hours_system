@@ -1,24 +1,50 @@
 # _勤怠管理アプリケーションシステム_
 
 ## _概要_
-    企業独自の勤怠管理アプリ
+    企業向け勤怠管理・スタッフ管理を目的にしたWebアプリ
+
+## _対象ユーザー_
+  一般スタッフ：出勤・退勤・休憩記録 / 月別勤務照会 / プロフィール編集
+  管理者：社員管理 / 勤怠管理 / 統計確認
+
+## _機能一覧_
+  ログイン・認証: Fortifyによるログイン / 会員登録 / メール認証 /
+  勤怠管理: 出勤・退勤ボタン / 休憩開始・終了 / 当日ステータス表示
+  従業員管理:スタッフ一覧 / 詳細 / 編集 / 削除（管理者のみ）
+  セキュリティ: CSRF / 認可（Gate） / 管理者判定機能 / throttling
+  UI: レスポンシブデザイン（PC / タブレット / スマートフォン対応）
+
+## _使用技術(実行環境)_
+### バックエンド
+    PHP 8 / Laravel 10 / Laravel Fortify
+### フロントエンド
+    Blade / HTML / CSS
+### データベース
+    MySQL 8 / Migration / Seeder / Factory
+### ミドルウェア
+　　Nginx / Docker Compose
+### 外部サービス
+　　Mailtrap（メール送信の検証）
+### 開発ツール
+    VSCode / Git / Laravel Artisan CLI / phpMyAdmin
 
 ## _環境構築_
-    1. git clone [リポジトリのURL]
-        ※今回はhttps://github.com/bam600/Work_hours_system.git
-    2. docker-compose up -d build
+    1.  リポジトリのクローン
+        git clone https://github.com/bam600/Work_hours_system.git
+        cd Work_hours_system
+    2. Docker 起動
+        docker-compose up -d --build
 ＊MySQLは、OSによって起動しない場合があるので、各PCにあわせて
 docker-compose.ymlファイルを編集してください。
-
-## _laravel環境構築_
-    1.docker-compose exec php bash
-    2.composer install
-    3.env.exampleファイルから.envファイルを作成し、環境変数を変更
-    4.php artisan key:generate
-    5.php artisn make:mygrate
-    6.php artisan db:seed
+    3.Laravel セットアップ
+        docker-compose exec php bash
+        composer install
+        cp .env.example .env
+        php artisan key:generate
+        php artisan migrate
+        php artisan db:seed
     
-## _laravel fortifyの導入_
+## _認証設定（Fortify）_
     1.docoker-compose exec php bash
     2.composer require laravel/fortify
     3.config/app.phpにApp\Providers\FortifyServiceProvider::class,を追加
@@ -28,28 +54,54 @@ docker-compose.ymlファイルを編集してください。
         Fortify::registerView(fn () => view('auth.register'));を追加
     ＊必要に応じてルーティングやビューを調整
 
+## _メール送信（Mailtrap）_
+  本アプリでは、新規登録時の確認メール送信・パスワードリセットメール送信を行うために Mailtrap を使用
+### Mailtrap アカウント作成
+  1.https://mailtrap.ioにアクセス
+  2.Sign up → 無料アカウント作成
+  3.Dashboard から Email Testing → Inboxes を開く
+  4.既存の Inbox を選択、または「Add Inbox」で新規作成
+### MAIL_USERNAME / MAIL_PASSWORD の取得方法
+  1.Mailtrap ダッシュボードの Inbox 画面を開く
+  2.上部メニューから Integration を選択
+  3.「Integrate with」から Laravel 9+ / 10 を選択
+  4.画面中央に .env 形式の SMTP 設定コード が表示されます
+    その中にある ⬇
+    MAIL_USERNAME=xxxxxxxxxxxx
+    MAIL_PASSWORD=xxxxxxxxxxxx
+    この2つが Mailtrapが発行したメール認証情報です。
+    (コピーのボタンでコピーしないと情報が得られません)
+### .envに以下を設定
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp.mailtrap.io
+    MAIL_PORT=2525
+    MAIL_USERNAME=xxxxxxxxxxx
+    MAIL_PASSWORD=xxxxxxxxxxx
+    MAIL_ENCRYPTION=null
+    MAIL_FROM_ADDRESS=info@example.com
+    MAIL_FROM_NAME="${APP_NAME}"
+
 ## _Livewireの導入_
     1.composer require livewire/livewire
 
-## _使用技術(実行環境)_
-### フレームワーク・ライブラリ
-  - Laravel 10.x
-  - Laravel Fortify（認証機能）
-  - Blade（テンプレートエンジン）
-  - Eloquent ORM（リレーション設計）
-### フロントエンド
-  - HTML / CSS（基本構造とスタイル）
-  - Blade（Laravelのテンプレートエンジン）
-### データベース
-  - MySQL 8.x
-  - Laravel Migration / Seeder / Factory（スキーマ・テストデータ管理）
-### 開発ツール
-- Visual Studio Code（推奨IDE）
-- Laravel Artisan CLI（開発支援コマンド）
-- Git（バージョン管理）
+## _URL一覧_
+    - トップページ：`http://localhost:8000` 
+    - ログイン：`http://localhost/login`  
+    - 登録：`http://localhost/register`
+    - 管理者ユーザ用ログイン：`http://localhost/admin/login`  
+
+## _テストユーザー（Seederで自動作成）_
+    http://localhost:8080/にアクセス
+    Seederで自動作成後staffsテーブルを開く
+    管理者でのログインする場合はis_adminカラムが1のユーザーの
+    メールアドレスを選択
+    パスワードは00000000でログイン
+    一般ユーザでログインする場合はis_adminカラムが0のユーザーの
+    メールアドレスを選択
+    パスワードは00000000でログイン
 
 ## _ER 図_
-![ER図](./docker/docs/er.png)
+![ER図](./docker/docs/attendance_er.png)
 
 ## _URL_
 ### 開発環境（ローカル）  
