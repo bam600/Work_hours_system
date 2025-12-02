@@ -39,11 +39,25 @@
         docker-compose exec php bash
         composer install
         cp .env.example .env
+    4.  env.exampleファイルから.envファイルを作成し
+        環境変数を下記のように変更する
+        DB_CONNECTION=mysql
+        DB_HOST=mysql
+        DB_PORT=3306
+        DB_DATABASE=laravel_db
+        DB_USERNAME=laravel_user
+        DB_PASSWORD=laravel_pass
+    5.  DB設定とデータ登録
         php artisan key:generate
         php artisan migrate
         php artisan db:seed
+        mySQLの接続の不具合の場合下記を行い、再度4.を行う
+        ① mariadb-clientインストール　apt update && apt install -y mariadb-client
+
     ＊MySQLは、OSによって起動しない場合があるので、各PCにあわせて
     docker-compose.ymlファイルを編集してください。
+
+
     
 ## _認証設定（Fortify）_
     1.  docoker-compose exec php bash
@@ -95,10 +109,10 @@
     http://localhost:8080/にアクセス
     Seederで自動作成後staffsテーブルを開く
     管理者でのログインする場合はis_adminカラムが1のユーザーの
-    メールアドレスを選択
+    メールアドレスを選択してコピーしてログイン画面のメールアドレス欄でペースト
     パスワードは00000000でログイン
     一般ユーザでログインする場合はis_adminカラムが0のユーザーの
-    メールアドレスを選択
+    メールアドレスを選択してコピーしてログイン画面のメールアドレス欄でペースト
     パスワードは00000000でログイン
 
 ## _ER 図_
