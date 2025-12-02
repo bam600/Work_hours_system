@@ -34,8 +34,6 @@
         cd Work_hours_system
     2. Docker 起動
         docker-compose up -d --build
-＊MySQLは、OSによって起動しない場合があるので、各PCにあわせて
-docker-compose.ymlファイルを編集してください。
     3.  Laravelセットアップ
         docker-compose exec php bash
         composer install
@@ -43,6 +41,8 @@ docker-compose.ymlファイルを編集してください。
         php artisan key:generate
         php artisan migrate
         php artisan db:seed
+    ＊MySQLは、OSによって起動しない場合があるので、各PCにあわせて
+    docker-compose.ymlファイルを編集してください。
     
 ## _認証設定（Fortify）_
     1.  docoker-compose exec php bash
