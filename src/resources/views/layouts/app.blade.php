@@ -1,4 +1,4 @@
-{--共通レイアウト--}
+{{--共通レイアウト--}}
 <!DOCTYPE html>
 <html lang="ja">
 <head>

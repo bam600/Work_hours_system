@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->foreign('attendance_id')->references('id')->on('attendances')->onDelete('restrict');
-            $table->foreign('staff_id')->references('id')->on('staff')->onDelete('restrict');
-            $table->foreign('approved_by')->references('id')->on('staff')->onDelete('set null');
+            $table->foreign('staff_id')->references('id')->on('staffs')->onDelete('restrict');
+            $table->foreign('approved_by')->references('id')->on('staffs')->onDelete('set null');
         });
     }
 

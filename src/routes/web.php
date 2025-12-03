@@ -21,7 +21,6 @@ use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 
 
-
 // PG01 会員登録画面**************************************************************************************
     //! get:会員登録フォームを表示(showは表示という責務が明確)
     Route::get('/register', [RegisterController::class, 'create'])->name('register'); 
@@ -107,3 +106,6 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminApproveController::class,'show'])->middleware('auth')->name('adminattendance.show');
 
     Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminApproveController::class,'approve'])->middleware('auth')->name('adminattendance.approve');
+
+    // テスト用
+    Route::get('/', function () {return view('welcome');});

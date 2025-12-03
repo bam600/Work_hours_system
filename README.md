@@ -58,7 +58,6 @@
     docker-compose.ymlファイルを編集してください。
 
 
-    
 ## _認証設定（Fortify）_
     1.  docoker-compose exec php bash
     2.  composer require laravel/fortify
@@ -114,6 +113,33 @@
     一般ユーザでログインする場合はis_adminカラムが0のユーザーの
     メールアドレスを選択してコピーしてログイン画面のメールアドレス欄でペースト
     パスワードは00000000でログイン
+## _PHPUnitの環境設定（単体テスト）_
+    docker exec -it work_hours_system_clean-mysql-1 mysql -u root -p
+    CREATE DATABASE test_db;
+    exit;
+    Work_hours_system/src/に.env.testingのテキストファイルを新規作成し下記をコピー＆ペースト
+
+    APP_ENV=testing
+    APP_KEY=base64:szNzDR564jEqNvdDj7qkV+pdQO5hJXKA3hrsSC6pR08=
+
+    DB_CONNECTION=mysql
+    DB_HOST=mysql
+    DB_PORT=3306
+    DB_DATABASE=test_db
+    DB_USERNAME=root
+    DB_PASSWORD=root
+
+    PHPunit9系にする
+    composer require --dev phpunit/phpunit:^9.6 --with-all-dependencies
+    ./vendor/bin/phpunit --version　PHPunitのバージョン確認
+    ここで PHPUnit 9.x.x と表示されれば成功です。
+    作成したテストファイルの存在を確認するため実行する
+    php artisan test
+    テスト用DB作成
+    php artisan migrate --env=testing
+
+    php artisan migrate --env=testing
+
 
 ## _ER 図_
 ![ER図](./docker/docs/attendance_er.png)
