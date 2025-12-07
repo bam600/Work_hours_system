@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             StaffSeeder::class,
             AttendanceSeeder::class,
             BreakSeeder::class,
+            AttendRequestSeeder::class,
         ]);
     }
 }

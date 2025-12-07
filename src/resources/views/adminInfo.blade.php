@@ -98,9 +98,9 @@
 
 <tr>
     <th class="list3">備考</th>
-    <td class="attendancelist">
+    <td>
         @if ($editable)
-            <input type="text" name="note" value="{{ old('note', $attendance->note ?? '') }}">
+            <textarea name="note" cols="30" rows="3">{{ old('note', $attendance->note ?? '') }}</textarea>
         @else
             {{ $attendance->note ?? '（なし）' }}
         @endif

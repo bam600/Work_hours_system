@@ -75,8 +75,9 @@
 @if($todayAttendance && ($todayAttendance->status === 'checkin' || $todayAttendance->status === 'endbreak'))
     <form method="POST" action="{{ route('attendance.store') }}">
         @csrf
-        <button type="submit" name="status" value="break" class="btn--break">休憩入</button>
         <button type="submit" name="status" value="checkout" class="btn--check">退勤</button>
+        <button type="submit" name="status" value="break" class="btn--break">休憩入</button>
+
     </form>
 @endif
 

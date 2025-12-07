@@ -96,7 +96,7 @@
     <tr>
         <th class="list3">備考</th>
         @if ($editable)
-            <td class="clockinout">
+            <a
                 <textarea name="note" cols="30" rows="3">{{ old('note', $attendance->note) }}</textarea>
                 @error('note')
                     <div class="error">{{ $message }}</div>

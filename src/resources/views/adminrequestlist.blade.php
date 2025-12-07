@@ -52,7 +52,7 @@
             📅{{ $date->format('Y年m月d日') }}
         </th>
         <th class="labelright">
-            <a href="{{ route('adminrequest.list', ['date' => $nextDate]) }}"" class="labelright">翌日→</a>
+            <a href="{{ route('adminrequest.list', ['date' => $nextDate]) }}" class="labelright">翌日→</a>
         </th>
     </tr>
 </table>
@@ -77,7 +77,10 @@
         <th class="listleft4">{{ $record['break_time'] }}</th>
         <th class="listleft4">{{ $record['work_time'] }}</th>
         <th class="listleft4">
-                <a class="infobtm" href="{{ route('adminattendance.info', ['id' => $record['id']]) }}?staff_id={{ $record['staff_id'] }}">詳細</a>
+            <a class="infobtm"
+                href="{{ route('adminattendance.info', ['id' => $record['id'], 'staff_id' => $record['staff_id']]) }}">
+    詳細
+</a>
         </th>
     </tr>
 @endforeach
@@ -85,3 +88,4 @@
     @endif
 </table>
 @endsection
+

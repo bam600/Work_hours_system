@@ -42,7 +42,7 @@
 <table class="monthtable">
     <tr>
         <th class="labelleft">
-            <a href="{{ route('list.create', ['month' => $prevMonth]) }}">←前月</a>
+            <a href="{{ route('list.create', ['month' => $prevMonth]) }}" class="labelleft">←前月</a>
         </th>
         <th colspan="4" class="monthlabel">📅{{ $date->format('Y/m') }}</th>
         <th class="labelright">

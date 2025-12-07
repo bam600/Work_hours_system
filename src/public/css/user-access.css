@@ -75,12 +75,12 @@
 
 /* エラーメッセージなどを下に置く場合 */
 .error {
-    color: red;
-    font-size: 18px;
+    color: #d9534f;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    margin-bottom: 12px;
     display: block;
-    /* ← 改行されて下に表示される */
-    margin-top: 20px;
-    /* ← テキストボックスとの間に余白 */
+    /* ← これがポイント！ */
 }
 
 /* ボタン */
@@ -125,6 +125,8 @@
     border-color: #007bff;
     outline: none;
 }
+
+
 
 /* =========================
 PC対応（1400〜1540px）
@@ -209,12 +211,16 @@ PC対応（1400〜1540px）
 }
 
 .form-group {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 50px;
+    width: 100%;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 20px;
     font-weight: 700;
 }
 
@@ -231,6 +237,8 @@ PC対応（1400〜1540px）
 
 .error {
     color: #e5484d;
-    display: block;
+    font-size: 0.9rem;
     margin-top: 6px;
+    margin-bottom: 0;
+    display: block;
 }

@@ -9,6 +9,8 @@ use App\Models\Attendance;
 
 class AttendanceFactory extends Factory
 {
+
+    protected $model = Attendance::class;
     /**
      * Define the model's default state.
      *

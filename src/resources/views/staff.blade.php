@@ -18,7 +18,7 @@
             <div class="header__links">
                 <a class="link" href="{{ route('list.create') }}">勤怠一覧</a>
                 <a class="link" href="{{ route('stafflist') }}">スタッフ一覧</a>
-                <a class="link" href="{{ route('login') }}">申請</a>
+                <a class="link" href="{{ route('request.list') }}">申請一覧</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btm">ログアウト</button>
@@ -42,12 +42,12 @@
 <table class="monthtable">
     <tr>
         <th class="labelleft">
-            <a href="{{ route('staff.attendance', ['id' => $id, 'month' => $prevMonth]) }}">←前月</a>
+            <a href="{{ route('staff.attendance', ['id' => $id, 'month' => $prevMonth]) }}" class="labelleft">←前月</a>
         </th>
 
         <th colspan="4"class="monthlabel">📅{{ $date->format('Y/m') }}</th>
         <th class="labelright">
-            <a href="{{ route('staff.attendance', ['id' => $id, 'month' => $nextMonth]) }}">翌月→</a>
+            <a href="{{ route('staff.attendance', ['id' => $id, 'month' => $nextMonth]) }}" class="labelright">翌月→</a>
         </th>
     </tr>
 </table>
