@@ -57,7 +57,9 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class); //プロフィール更新
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class); // パスワード変更
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class); //パスワードリセット
-
+        Fortify::loginView(fn () => view('auth.login'));
+        Fortify::registerView(fn () => view('auth.register'));
+        
 
         Fortify::authenticateUsing(function (Request $request) {
             $staff = Staff::where('email', $request->email)->first();

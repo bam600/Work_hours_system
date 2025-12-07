@@ -61,9 +61,8 @@
 ## _認証設定（Fortify）_
     1.  docoker-compose exec php bash
     2.  composer require laravel/fortify
-    3.  config/app.phpにApp\Providers\FortifyServiceProvider::class,を追加
-    4.  php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
-    5.  App\Providers\FortifyServiceProvider.phpに
+    3.  php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
+    5.  App\Providers\FortifyServiceProvider.phpのbootメソッド内に
         Fortify::loginView(fn () => view('auth.login'));
         Fortify::registerView(fn () => view('auth.register'));を追加
         ＊必要に応じてルーティングやビューを調整

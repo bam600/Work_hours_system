@@ -37,7 +37,7 @@ class AttendanceSeeder extends Seeder
                 'clock_in' => $clockIn,
                 'clock_out' => $clockOut,
                 'actual_work_time' => $workTimeFormatted,
-                'status' => '出勤',
+                'status' => 'checkout',
             ]);
         }
     }
